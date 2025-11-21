@@ -1,0 +1,135 @@
+services:
+  postgres:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: django
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ANONYMIZED
+      POSTGRES_PORT: 5432
+    volumes:
+      - ./postgres_data:/var/lib/postgresql/data:rw
+    restart: unless-stopped
+    ports:
+      - "5432:5432"
+    networks:
+      - back
+
+  django:
+    build: 
+      context: ./djangosite
+      dockerfile: Dockerfile
+    environment:
+      DATABASE_HOST: postgres
+      N_WORKERS: 1
+    volumes:
+      - ./djangosite:/djangosite:rw
+      - djangosite_dynamic:/djangosite_dynamic:rw
+      - ./djangosite_data:/djangosite_data:rw
+    restart: unless-stopped
+    networks:
+      - middle
+      - back
+    depends_on:
+      - postgres
+
+  umami:
+    image: ghcr.io/umami-software/umami:postgresql-latest
+    environment:
+      DATABASE_URL: postgresql://postgres:ANONYMIZED@postgres:5432/umami
+    restart: unless-stopped
+    networks:
+      - middle2
+      - back
+    depends_on:
+      - postgres
+
+  pgadmin:
+    image: dpage/pgadmin4
+    volumes:
+      - ./pgadmin_data:/var/lib/pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ANONYMIZED
+      PGADMIN_DEFAULT_PASSWORD: ANONYMIZED
+    restart: unless-stopped
+    networks:
+      - middle3
+      - back
+
+  nginx:
+    image: nginx
+    command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
+    volumes:
+      - djangosite_dynamic:/djangosite_dynamic:ro
+      - ./djangosite_data:/djangosite_data:ro
+      - ./nginx:/etc/nginx:rw
+      - letsencrypt:/letsencrypt:ro
+      - certbot:/certbot:ro
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    networks:
+      - front
+      - middle
+      - middle2
+      - middle3
+    depends_on:
+      - django
+      - umami
+      - pgadmin
+
+  certbot:
+    image: certbot/certbot
+    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
+    volumes:
+      - letsencrypt:/etc/letsencrypt:rw
+      - certbot:/var/www/certbot:rw
+    restart: unless-stopped
+    networks:
+      - isolated
+    depends_on:
+      - nginx
+
+volumes:
+  djangosite_dynamic:
+  certbot:
+  letsencrypt:
+
+networks:
+  isolated:
+    driver: bridge
+
+  front:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.30.101.0/24
+
+  middle:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.30.111.0/24
+
+  middle2:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.30.112.0/24
+
+  middle3:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.30.113.0/24
+
+  back:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.30.121.0/24

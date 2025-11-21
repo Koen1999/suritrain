@@ -1,0 +1,86 @@
+{% extends "main/base.html" %}
+
+{% block title %}
+ANONYMIZED - {{ publication.title }}
+{% endblock %}
+{% block title2 %}
+ANONYMIZED - {{ publication.title }}
+{% endblock %}
+
+{% block description %}
+{{ publication.abstract }}
+{% endblock %}
+
+{% block keywords %}
+{{ publication.keywords }}
+{% endblock %}
+
+{% block opengraph %}
+<meta property="og:type" content="article">
+<meta property="og:article:published_time" content="{{ publication.publication_date }}">
+<meta property="og:article:modified_time" content="{{ publication.last_modified_date }}">
+<meta property="og:article:author" content="{{ publication.authors }}">
+<meta property="og:article:section" content="{{ publication.title }}">
+<meta property="og:article:tag" content="{{ publication.keywords }}">
+{% endblock %}
+
+{% block preload %}
+<link rel="preload" href="{{ publication.pdf.url }}" as="object" type="application/pdf">
+{% endblock %}
+
+{% block content %}
+<h2>{{ publication.title }}{% if publication.is_new %}<span class="badge bg-primary lead mx-2">New</span>{% endif %}
+</h2>
+<div class="grid">
+        <div class="row">
+                <span class="card-subtitle pb-2 fs-4 text-body-secondary initialism">
+                        {{ publication.authors }}
+                </span>
+        </div>
+        <div class="row">
+                <span class="card-subtitle pb-2 fs-6 text-body-secondary initialism">
+                        {{ publication.venue_name }}, {{ publication.location }}, {{ publication.publication_date }}
+                </span>
+        </div>
+</div>
+<span class="d-flex border border-top-0 border-primary mb-2"></span>
+<div class="card-body fs-5 d-flex flex-wrap justify-content-center">
+        {% if publication.venue_link and publication.publisher_name %}
+        <a href="{{ publication.venue_link }}" target="_blank" class="card-link d-inline-flex p-2"><i
+                        class="bi bi-text-center me-1"></i>{{ publication.publisher_name }}</a>
+        {% endif %}
+
+        {% if publication.institution_link and publication.institution_name %}
+        <a href="{{ publication.institution_link }}" target="_blank" class="card-link d-inline-flex p-2"><i
+                        class="bi bi-bank2 me-1"></i>{{ publication.institution_name }}</a>
+        {% endif %}
+
+        {% if publication.arxiv_link %}
+        <a href="{{ publication.arxiv_link }}" target="_blank" class="card-link d-inline-flex p-2"><i
+                        class="bi bi bi-file-earmark me-1"></i>arXiv</a>
+        {% endif %}
+
+        {% if publication.github_link %}
+        <a href="{{ publication.github_link }}" target="_blank" class="card-link d-inline-flex p-2"><i
+                        class="bi bi-github me-1"></i>GitHub</a>
+        {% endif %}
+
+        {% if publication.pdf %}
+        <a href="{{ publication.get_absolute_url }}" class="card-link d-inline-flex p-2"><i
+                        class="bi bi-file-earmark-pdf me-1"></i>PDF</a>
+        {% endif %}
+</div>
+<span class="d-flex border border-top-0 border-primary mb-2"></span>
+{% if publication.doi %}
+<p>DOI: <a href="{{ publication.doi_url }}" target="_blank">{{ publication.doi }}</a></p>
+<span class="d-flex border border-top-0 border-primary mb-2"></span>
+{% endif %}
+<h3>Abstract</h5>
+        <p>{{ publication.abstract }}</p>
+        <span class="d-flex border border-top-0 border-primary mb-2"></span>
+        <div class="w-100 pt-2 ratio ratio-1x1">
+                <object data="{{ publication.pdf.url }}" type="application/pdf" class="h-100 w-100">
+                        <p>Unable to display PDF file. <a href="{{ publication.pdf.url }}">Download</a> instead.</p>
+                </object>
+        </div>
+        {% endblock %}

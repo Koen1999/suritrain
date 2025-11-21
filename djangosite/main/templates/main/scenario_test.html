@@ -1,0 +1,113 @@
+{% extends "main/base.html" %}
+{% load static %}
+
+{% block title %}
+ANONYMIZED - CTF Website - Scenario
+{% endblock %}
+{% block title2 %}
+ANONYMIZED - CTF Website - Scenario
+{% endblock %}
+
+{% block description %}
+{% endblock %}
+
+{% block keywords %}
+Network Security Research, Intrusion Detection, Incident Response, Digital Forensics, ANONYMIZED
+{% endblock %}
+
+{% block opengraph %}
+{% endblock %}
+
+{% block preload %}
+{% endblock %}
+
+{% block content %}
+<div class="row row-cols-auto">
+  <div class="col-sm-8">
+    <div class="container-sm">
+      <h2 class="pt-4 mx-3">Scenario - {{ scenario.title }}</h2>
+      <p class="mx-3">{{ scenario.description }}</p>
+      <p class="mx-3">Download the PCAP using the link below{% if scenario.details_pdf %} or view the handout using the other link{% endif %} for more details on what you should detect with your signature.</p>
+      <a href="{{ scenario.pcap.pcap.url }}" rel="nofollow" target="_blank" class="m-3 lead text-white" data-bs-toggle="tooltip" data-bs-placement="right" title="Click here to download the scenario PCAP and to investigate the behavior you should detect."><i class="bi bi-ethernet me-1"></i>PCAP</a>
+      {% if scenario.details_pdf %}
+        <a href="{{ scenario.details_pdf.url }}" rel="nofollow" target="_blank" class="m-3 lead text-white" data-bs-toggle="tooltip" data-bs-placement="right" title="Click here to download the scenario handout and to get a detailed description of the scenario."><i class="bi bi-file-pdf me-1"></i>Handout</a>
+      {% endif %}
+    </div>
+    <div class="container-fluid">
+      <div class="row row-cols-auto d-flex align-items-stretch">
+        <div class="col-12 col-sm-6">
+            <label class="lead p-2" for="submitted-rule">Submitted Rule</label>
+            <textarea class="form-control" style="min-height:200px" autofocus disabled spellcheck="false" data-gramm="false" wrap="soft" id="submitted-rule" data-bs-toggle="tooltip" data-bs-placement="top" title="This textarea shows the last rule submitted for running tests." placeholder="alert ...">{% if last_submitted_rule %}{{ last_submitted_rule }}{% endif %}</textarea>
+        </div>
+        <div class="col-12 col-sm-6">
+          <label class="lead p-2" for="formatted-submitted-rule">Formatted Submitted Rule</label>
+          <div class="border overflow-auto text-nowrap" style="min-height:200px" id="formatted-submitted-rule" data-bs-toggle="tooltip" data-bs-placement="top" title="When you submit a rule, a formatted version of your rule will appear in this field.">{% if last_submitted_rule_formatted %}{{ last_submitted_rule_formatted |safe }}{% endif %}</div>
+        </div>
+        <div class="row">
+          <h4 class="m-3">Test output</h3>
+        </div>
+        <div class="row row-cols-auto d-flex align-items-stretch">
+          <div class="col-12">
+            <label class="lead p-2" for="suricata-fast">Suricata fast</label>
+            <div class="border overflow-auto text-nowrap" style="min-height:200px" id="suricata-fast">{% for line in fast %}<p class="m-0">{{ line }}</p>{% endfor %}</div>
+          </div>
+          <div class="col-12">
+            <label class="lead p-2" for="suricata-eve">Suricata eve</label>
+            <div class="border overflow-auto text-nowrap" style="min-height:200px" id="suricata-eve">{% for line in eve %}<p class="m-0">{{ line }}</p>{% endfor %}</div>
+          </div>
+          <div class="col-12">
+            <label class="lead p-2" for="suricata-log">Suricata log</label>
+            <div class="border overflow-auto text-nowrap" style="min-height:200px" id="suricata-log">{% for line in log %}<p class="m-0">{{ line }}</p>{% endfor %}</div>
+          </div>
+          <div class="col-12">
+            <label class="lead p-2" for="suricata-conf">Suricata configuration</label>
+            <div class="border overflow-auto text-nowrap" style="min-height:200px" id="suricata-conf">{% for line in yaml %}<p class="m-0" style="white-space:pre">{{ line }}</p>{% endfor %}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-4">
+    <div class="row row-cols-auto m-3 justify-content-center" id="scenario-navigation">
+      <div class="col-12 col-sm-6"><div class="row justify-content-center"><a href="{% url 'main:scenario' scenario.id %}" class="m-2 btn btn-primary text-white d-inline-flex w-auto" role="button"><i class="mx-2 bi bi-arrow-bar-left"></i>Back to scenario</a></div></div>
+    </div>
+    <div class="row m-3">
+      <h3 class="mx-3">Test</h3>
+      <div class="row row-cols-auto">
+        <div class="col-12 col-sm-6 d-flex align-items-stretch" style="min-width:150px">
+          <div class="card m-2 w-100 bg-primary">
+            <div class="card-body">
+              <h5 class="card-title">{{ test.title }}</h5>
+              <h6 class="card-subtitle mb-2 text-muted">{{ test.pcap.title }}</h6>
+              <p class="card-text">{{ test.pcap.note }}</p>
+              <div class="container p-1">
+                {% if test.expected %}
+                  <em class="card-text">Should raise one alert.</em>
+                {% else %}
+                  <em class="card-text">Should raise zero alerts.</em>
+                {% endif %}
+              </div>
+              {% if is_staff and test.hidden %}
+              <div class="container p-1">
+                <em class="card-text">This test is not visible to regular users.</em>
+              </div>
+              {% endif %}
+  
+              <div class="container p-1">
+                <a href="{{ test.pcap.pcap.url }}" rel="nofollow" target="_blank" class="m-1 d-inline-flex text-white" data-bs-toggle="tooltip" data-bs-placement="right" title="Click here to download the scenario PCAP and to investigate the test in more detail."><i class="bi bi-ethernet me-1"></i>PCAP</a>
+                {% if test.pcap.reference_link %}
+                  <a href="{{ test.pcap.reference_link }}" rel="nofollow" target="_blank" class="m-1 d-inline-flex text-white" data-bs-toggle="tooltip" data-bs-placement="right" title="Click here to learn more about the source of the PCAP."><i class="bi bi-journal-text me-1"></i>Reference</a>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+{% endblock %}

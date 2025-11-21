@@ -1,0 +1,13 @@
+*.pyc
+
+venv/
+node_modules/
+
+djangosite/static/js/*
+djangosite/static/css/*
+
+djangosite/media/retrieved/*
+
+djangosite/main/migrations/
+
+djangosite/db.sqlite3

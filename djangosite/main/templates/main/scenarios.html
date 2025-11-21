@@ -1,0 +1,45 @@
+{% extends "main/base.html" %}
+{% load static %}
+
+{% block title %}
+ANONYMIZED - CTF Website - Home
+{% endblock %}
+{% block title2 %}
+ANONYMIZED - CTF Website - Home
+{% endblock %}
+
+{% block description %}
+{% endblock %}
+
+{% block keywords %}
+Network Security Research, Intrusion Detection, Incident Response, Digital Forensics, ANONYMIZED
+{% endblock %}
+
+{% block opengraph %}
+{% endblock %}
+
+{% block preload %}
+{% endblock %}
+
+{% block content %}
+<div class="container-sm">
+    <h2 class="pt-4">Scenarios</h2>
+    <p>
+        Below, you can find several scenarios, for which you should each develop a solution.
+        You should get started with the <em>Baby</em> scenario, which is an easy task that will familiarize you with Suricata and the CTF website.
+        Thereafter, you can work on and switch between the other scenarios as you like. There is no need to completely finalize one scenario before starting to work on another one.
+    </p>
+    {% for scenario in scenarios %}
+    <div class="card m-2">
+        <div class="card-body">
+            <h5 class="card-title">{{ scenario.title }}</h5>
+            <p class="card-text">{{ scenario.description }}</p>
+            <a href="{% url 'main:scenario' scenario.id %}" class="btn btn-primary">Work on the {{ scenario.title }} scenario</a>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}
+
+{% block scripts %}
+{% endblock %}
