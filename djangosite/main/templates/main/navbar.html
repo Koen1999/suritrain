@@ -1,0 +1,35 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand fs-5" href="/"><h1>CTF</h1></a>
+        <ul class="navbar-nav container-fluid justify-content-md-center">
+            <li class="nav-item"><a class="nav-link fs-5" href="{% url 'main:leaderboard' %}"><h3>Leaderboard</h3></a></li>
+            <li class="nav-item"><a class="nav-link fs-5" href="{% url 'main:scenarios' %}"><h3>Scenarios</h3></a></li>
+            {% comment %} {% if not user.is_authenticated %}
+            <li class="nav-item"><a class="nav-link fs-5" href="{% url 'main:register' %}"><h3>Register</h3></a></li>
+            {% endif %} {% endcomment %}
+            <div class="vr mx-3"></div>
+            <li class="nav-item"><a class="nav-link fs-6" href="https://docs.suricata.io/en/suricata-7.0.7/rules/" rel="nofollow" target="_blank" ><h4><i class="bi bi-info-circle me-1"></i>Suricata Docs</h4></a></li>
+            {% if user.is_authenticated %}
+                <li class="nav-item"><a class="nav-link fs-6" href="{% url 'main:handout' %}" rel="nofollow" target="_blank" ><h4><i class="bi bi-file-earmark-pdf me-1"></i>Handout</h4></a></li>
+            {% endif %}
+            <li class="nav-item"><a class="nav-link fs-6" href="https://m365.cloud.microsoft/chat" rel="nofollow" target="_blank" ><h4><i class="bi bi-robot me-1"></i>Copilot</h4></a></li>
+            <li class="nav-item dropstart position-absolute end-0 mx-2">
+                <a class="nav-link dropdown-toggle fs-5" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    Account
+                </a>
+                <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDropdown">
+                {% if user.is_authenticated %}
+                    <li><p class="dropdown-item fs-7 disabled">Logged in as <i>{{user.get_username}}</i></p></li>
+                    <li>
+                        <form class="dropdown-item" action="{% url 'main:logout' %}" method="post">
+                            {% csrf_token %}
+                            <button class="nav-link fs-6" type="submit"><h3>Logout</h3></button>
+                        </form>
+                    </li>
+                {% else %}
+                    <li><a class="dropdown-item nav-link fs-6" href="{% url 'main:login' %}"><h3>Login</h3></a></li>
+                {% endif %}
+            </li>
+        </ul>
+    </div>
+</nav>

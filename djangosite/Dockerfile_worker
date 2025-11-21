@@ -1,0 +1,7 @@
+# syntax = edrevo/dockerfile-plus
+
+FROM ubuntu:22.04
+INCLUDE+ Dockerfile
+
+VOLUME ["/djangosite", "/djangosite_dynamic", "/djangosite_data"]
+ENTRYPOINT ["/bin/sh", "/djangosite/entrypoint_worker.sh"]

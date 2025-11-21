@@ -1,0 +1,78 @@
+{% extends "main/base.html" %}
+{% load static %}
+
+{% block title %}
+ANONYMIZED - CTF Website - Login
+{% endblock %}
+{% block title2 %}
+ANONYMIZED - CTF Website - Login
+{% endblock %}
+
+{% block description %}
+{% endblock %}
+
+{% block keywords %}
+Network Security Research, Intrusion Detection, Incident Response, Digital Forensics, ANONYMIZED
+{% endblock %}
+
+{% block opengraph %}
+{% endblock %}
+
+{% block preload %}
+{% endblock %}
+
+{% block content %}
+<div class="container-sm">
+    <div class="row justify-content-center">
+        <div class="col-sm-6">
+            {% if form.errors %}
+            <p>The registration form contains errors. Please try again.</p>
+            {% endif %}
+
+            <form method="post" action="{% url 'main:register' %}">
+                {% csrf_token %}
+                <div class="form-group my-1">
+                    <label for="id_email">Email address</label>
+                    <input type="email" class="form-control" name="email" value="ANONYMIZED" class="vTextField" maxlength="254" id="id_email">
+                    {{ form.email.errors }}
+                </div>
+                <div class="form-group my-1">
+                    <label for="id_username">Username</label>
+                    <input type="text" class="form-control" name="username" autofocus="" autocapitalize="none" autocomplete="username" maxlength="32" required="" id="id_username" placeholder="Enter username">
+                    {{ form.username.errors }}
+                </div>
+                <div class="form-group my-1">
+                    <label for="id_password1">Password</label>
+                    <input type="password" class="form-control" name="password1" autocomplete="current-password" required="" id="id_password1" placeholder="Enter password">
+                    {{ form.password1.errors }}
+                </div>
+                <div class="form-group my-1">
+                    <label for="id_password2">Confirm Password</label>
+                    <input type="password" class="form-control" name="password2" required="" id="id_password2" placeholder="Repeat password">
+                    {{ form.password2.errors }}
+                </div>
+                <div class="form-check my-1">
+                    <label for="id_accept_informed_consent" class="form-check-label">I declare that:
+                        <ul>
+                            <li>I am aware the CTF is set up as a research experiment to learn more about how intrusion detection rules are written and the effects thereof; and</li>
+                            <li>I have reviewed the informed consent form (<a href="/static/pdf/informed_consent.pdf" rel="nofollow" target="_blank" class="m-1 d-inline-flex"><i class="bi bi-download me-1"></i>Click here to download</a>) and <strong>I hereby consent to the contents of the informed consent form</strong>; and</li>
+                            <li>I am intend to take the intake questionaire and submit them to fullfil the <em>required prerequisites</em> for participating in the CTF; and</li>
+                            <li>ANONYMIZED; and</li>
+                            <li>I am intend to take the short outtake questionaire and submit them after having participated in the CTF.</li>
+                        </ul> 
+                    </label>
+                    <input type="checkbox" class="form-check-input" name="accept_informed_consent" required="" id="id_accept_informed_consent">
+                    {{ form.accept_informed_consent.errors }}
+                </div>
+                <button type="submit" class="btn btn-primary my-1">Submit</button>
+                <input type="hidden" name="next" value="{{ next }}">
+            </form>
+
+            <p>If you forgot your password or have other questions, please <a href="mailto:ANONYMIZED">contact the organizers</a>.</p>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+{% endblock %}

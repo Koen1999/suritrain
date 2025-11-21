@@ -1,0 +1,14 @@
+{
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "sass:release": "sass -q --load-path=node_modules/ --style=compressed static/scss/theme.scss static/css/theme.css",
+    "preparestatic": "cp node_modules/bootstrap/dist/js/* static/js/ && cp node_modules/@popperjs/core/dist/umd/* static/js/ && cp node_modules/jquery/dist/* static/js/ && cp -r node_modules/bootstrap-icons/font/* static/font/"
+  },
+  "dependencies": {
+    "bootstrap": "^5.1.3",
+    "bootstrap-icons": "^1.11.0",
+    "@popperjs/core": "^2.11.8",
+    "jquery": "^3.6.0",
+    "sass": "^1.49.9"
+  }
+}

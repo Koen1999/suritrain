@@ -1,0 +1,18 @@
+services:
+  django_worker:
+    build: 
+      context: ./djangosite
+      dockerfile: Dockerfile_worker
+    environment:
+      DATABASE_HOST: host.docker.internal
+      N_WORKERS: 6
+    volumes:
+      - ./djangosite:/djangosite:rw
+      - djangosite_dynamic:/djangosite_dynamic:rw
+      - ./djangosite_data:/djangosite_data:rw
+    restart: unless-stopped
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+volumes:
+  djangosite_dynamic:

@@ -1,0 +1,4 @@
+Contact: mailto:ANONYMIZED
+Expires: 2029-12-31T23:00:00.000Z
+Preferred-Languages: en
+Canonical: https://ctf.anonymized.net/.well-known/security.txt
