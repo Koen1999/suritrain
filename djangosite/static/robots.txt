@@ -1,0 +1,6 @@
+User-agent: *
+Disallow: /*.txt
+Disallow: /admin
+Disallow: /__debug__
+
+Sitemap: https://ctf.anonymized.net/sitemap.xml

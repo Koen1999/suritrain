@@ -1,0 +1,93 @@
+{% load static %}
+<!doctype html>
+<html lang="en" data-bs-theme="dark">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="preload" href="{% static 'css/theme.css' %}" as="style" type="text/css">
+    <link rel="preload" href="{% static 'font/bootstrap-icons.min.css' %}" as="style" type="text/css">
+    <link rel="preload" href="{% static 'js/jquery.min.js' %}" as="script" type="application/javascript">
+    <link rel="preload" href="{% static 'js/popper.min.js' %}" as="script" type="application/javascript">
+    <link rel="preload" href="{% static 'js/bootstrap.min.js' %}" as="script" type="application/javascript">
+    <link rel="preload" href="https://umami.ctf.anonymized.net/script.js" as="script" type="application/javascript">
+    {% block preload %}{% endblock %}
+
+    <title>{% block title %}{% endblock %}</title>
+
+    <link rel="icon" type="image/x-icon" href="{% static 'favicon.ico' %}">
+
+    <meta name="author" content="ANONYMIZED">
+    <meta name="description" content="{% block description %}{% endblock %}">
+    <meta name="keywords" content="{% block keywords %}{% endblock %}">
+
+    <meta property="og:title" content="{% block title2 %}{% endblock %}">
+    <meta property="og:url" content="https://ctf.anonymized.net{{ request.path }}">
+    <meta property="og:image" content="https://ctf.anonymized.net{% static 'jpg/picture.jpg' %}">
+    <meta property="og:image:type" content="image/jpeg">
+    <meta property="og:image:alt" content="ANONYMIZED">
+    <meta property="og:locale" content="en_NL">
+    <meta property="og:locale:alternate" content="en_US, en_GB">
+    <meta property="og:site_name" content="ANONYMIZED">
+    {% block opengraph %}{% endblock %}
+
+    <link href="{% static 'css/theme.css' %}" rel="stylesheet">
+    <link href="{% static 'font/bootstrap-icons.min.css' %}" rel="stylesheet">
+
+    <link rel="canonical" href="https://ctf.anonymized.net{{ request.path }}">
+
+</head>
+
+<body>
+    {% include 'main/navbar.html' %}
+
+    <main class="container-fluid py-3">
+        <div>
+            {% block content %}{% endblock %}
+        </div>
+    </main>
+
+    {% include 'main/footer.html' %}
+
+    <script src="{% static 'js/jquery.min.js' %}"></script>
+    <script src="{% static 'js/popper.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+
+    <script>
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl)
+        })
+    </script>
+
+    {% block scripts %}{% endblock %}
+    
+    <script async src="https://umami.ctf.anonymized.net/script.js" data-website-id="01e96423-7920-4044-9cde-74a14401ad03"
+        data-do-not-track="true" data-domains="ctf.anonymized.net"></script>
+    <script type="text/javascript">
+        (() => {
+            const name = 'internal-link-click';
+            document.querySelectorAll('a').forEach(a => {
+                if (a.host === window.location.host && !a.getAttribute('data-umami-event')) {
+                    a.setAttribute('data-umami-event', name);
+                    a.setAttribute('data-umami-event-source', window.location.href);
+                    a.setAttribute('data-umami-event-target', a.href);
+                }
+            });
+        })();
+
+        (() => {
+            const name = 'outbound-link-click';
+            document.querySelectorAll('a').forEach(a => {
+                if (a.host !== window.location.host && !a.getAttribute('data-umami-event')) {
+                    a.setAttribute('data-umami-event', name);
+                    a.setAttribute('data-umami-event-source', window.location.href);
+                    a.setAttribute('data-umami-event-target', a.href);
+                }
+            });
+        })();
+    </script>
+</body>
+
+</html>

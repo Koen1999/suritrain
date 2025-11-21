@@ -1,0 +1,95 @@
+{% extends "main/base.html" %}
+{% load static %}
+
+{% block title %}
+ANONYMIZED - CTF Website - Home
+{% endblock %}
+{% block title2 %}
+ANONYMIZED - CTF Website - Home
+{% endblock %}
+
+{% block description %}
+{% endblock %}
+
+{% block keywords %}
+Network Security Research, Intrusion Detection, Incident Response, Digital Forensics, ANONYMIZED
+{% endblock %}
+
+{% block opengraph %}
+{% endblock %}
+
+{% block preload %}
+{% endblock %}
+
+{% block content %}
+<div class="container-sm">
+    <h2 class="pt-4">Capture the Flag</h2>
+    <p class="lead"><strong>Network Intrusion Detection rule engineering with Suricata</strong> - <small>Workshop on rule specificity and coverage</small></p>
+    {% comment %} <p class="lead px-5"><em>Organized on <strong>January 1st, 2025</strong></em></p>
+    <p>
+        On January 1st, we will organize a Capture the Flag exercise as a research experiment.
+        We aim at making this an enjoyable experience for you, whilst enabling the collection of research data.
+    </p>
+
+    <h3 class="pt-4">Why you should participate</h3>
+    <ul>
+        <li>You can participate in a Capture the Flag and compete with other participants; and</li>
+        <li>You can learn more about network intrusion detection rule engineering and Suricata in specific; and</li>
+        <li>You help enable novel research contributing to improving rule-based intrusion detection systems.</li>
+    </ul> 
+    <h3 class="pt-4">What the CTF will look like</h3>
+    <p>
+        The Capture the Flag will be organized as a 4-hour activity (with breaks).
+        Before the actual CTF begins, you will be provided with more background information on the CTF itself, including an explanation of the User Interface and how scores for the leaderboard are computed.
+        A part of the participants will receive an additional instruction on rule design principles before the CTF begins. (the other group can opt to receive the same instruction after the CTF)
+    </p>
+    <p>
+        Once the CTF begins, you can work on different scenarios in an arbitrary order and submit rules via this website.
+        When you submit a rule, you will receive initial feedback in the form of Suricata error output (if applicable) and syntax highlighting.
+        Additionally, the submitted rule will be ran against several network traffic captures to see if you detect the correct traffic and a score will be computed accordingly.
+    </p>
+    <p>
+        The leaderboard will be continuously updated throughout the Capture the Flag, making it a competitive experience.
+        At the end of the CTF, we will congratulate the winner.
+    </p>
+
+    <h3 class="pt-4">What the research is about</h3>
+    <p>
+        During the capture the flag, we will collect the rules your write to characterize the rule writing process and test the quality of those rules.
+        We will also reach out with a questionaire to better understand your background and experience with related topics (i.e. network protocols) to better understand results from the CTF.
+    </p>
+        <p>The research is currently centered around two research questions:</p>
+    <ul>
+        <li>How can the network intrusion detection rule engineering process be characterized?</li>
+        <li>How do different aspects of the rule engineering process affect the quality of the resulting rules?</li>
+    </ul>
+
+    <h3 class="pt-4">What about privacy</h3>
+    <p>
+        Your name will not be displayed on the leaderboard if you do not wish so.
+        You can come up with a username of your choice that will be displayed on the leaderboard instead.
+    </p>
+    <p>
+        As part of the CTF, we will process your email address to communicate with you and to link results from the questionaires with results from the CTF.
+        Additionally, we collect information through a questionaire regarding your experience in relevant areas (i.e. network protocols).
+        We will anonymize all data as soon as possible.
+    </p>
+    <p>You can read more about the data we process in the <a href="/static/pdf/informed_consent.pdf" rel="nofollow" target="_blank" class="m-1 d-inline-flex"><i class="bi bi-download me-1"></i>informed consent form</a>.
+
+    <h3 class="pt-4">Questions</h3> {% endcomment %}
+
+    <div class="row">
+        {% if user.is_authenticated %}
+            <a class="btn btn-primary fs-6 my-2 p-2" type="button" href="{% url 'main:scenario_first' %}">
+                Click here to work on the first scenario
+            </a>
+        {% else %}
+            <a class="btn btn-primary fs-6 my-2 p-2" type="button" href="{% url 'main:login' %}">
+                Click here to login
+            </a>
+        {% endif %}
+    </div>
+
+    If you have any questions about the CTF activity, the research, the informed consent form, or anything else, please <a href="mailto:ANONYMIZED">contact the organizers</a>.
+</div>
+{% endblock %}

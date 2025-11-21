@@ -1,0 +1,66 @@
+{% extends "main/base.html" %}
+{% load static %}
+
+{% block title %}
+ANONYMIZED - CTF Website - Leaderboard
+{% endblock %}
+{% block title2 %}
+ANONYMIZED - CTF Website - Leaderboard
+{% endblock %}
+
+{% block description %}
+{% endblock %}
+
+{% block keywords %}
+Network Security Research, Intrusion Detection, Incident Response, Digital Forensics, ANONYMIZED
+{% endblock %}
+
+{% block opengraph %}
+{% endblock %}
+
+{% block preload %}
+{% endblock %}
+
+{% block content %}
+<div class="container-sm">
+    <h2 class="pt-4">Leaderboard</h2>
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Name</th>
+                <th scope="col">Score</th>
+                <th scope="col">First obtained at</th>
+                {% if show_hidden %}
+                    <th scope="col">Score (incl. hidden)</th>
+                    <th scope="col">First obtained at (incl. hidden)</th>
+                {% endif %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in users %}
+            <tr>
+                <th scope="row">{{ forloop.counter }}</th>
+                <td>{{ user.name }}</td>
+                <td>{{ user.score }}</td>
+                <td>{{ user.obtained_at }}</td>
+                {% if show_hidden %}
+                    <td>{{ user.staff_score }}</td>
+                    <td>{{ user.staff_obtained_at }}</td>
+                {% endif %}
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    function autoRefresh() {
+        location.reload();
+    }
+    setInterval('autoRefresh()', 5000);
+</script>
+{% endblock %}

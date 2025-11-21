@@ -1,0 +1,62 @@
+<div class="accordion py-3" id="accordion">
+    {% for publication in publications %}
+    <div class="accordion-item card my-3">
+        <div class="accordion-header" id="heading-{{ publication.slug }}">
+            <button class="accordion-button card collapsed" type="button" data-bs-toggle="collapse"
+                data-bs-target="#collapse-{{ publication.slug }}" aria-expanded="false"
+                aria-controls="collapse-{{ publication.slug }}"
+                onClick="track_publication_details('{{ publication.title }}')">
+                <span class="card-title fs-3 fw-bold">
+                    {{ publication.title }}
+                    {% if publication.is_new %}<span class="badge bg-primary lead mx-2">New</span>{% endif %}
+                </span>
+                <span class="card-subtitle pb-2 fs-4 text-body-secondary initialism">
+                    {{ publication.authors }}
+                </span>
+                <span class="card-subtitle pb-2 fs-6 text-body-secondary initialism">
+                    {{ publication.venue_name }}, {{ publication.location }}, {{ publication.publication_date }}
+                </span>
+            </button>
+            <div class="card-body fs-5 d-flex flex-wrap justify-content-center">
+                {% if publication.venue_link and publication.publisher_name %}
+                <a href="{{ publication.venue_link }}" target="_blank" class="card-link d-inline-flex p-2"><i
+                        class="bi bi-text-center me-1"></i>{{ publication.publisher_name }}</a>
+                {% endif %}
+
+                {% if publication.institution_link and publication.institution_name %}
+                <a href="{{ publication.institution_link }}" target="_blank" class="card-link d-inline-flex p-2"><i
+                        class="bi bi-bank2 me-1"></i>{{ publication.institution_name }}</a>
+                {% endif %}
+
+                {% if publication.arxiv_link %}
+                <a href="{{ publication.arxiv_link }}" target="_blank" class="card-link d-inline-flex p-2"><i
+                        class="bi bi bi-file-earmark me-1"></i>arXiv</a>
+                {% endif %}
+
+                {% if publication.github_link %}
+                <a href="{{ publication.github_link }}" target="_blank" class="card-link d-inline-flex p-2"><i
+                        class="bi bi-github me-1"></i>GitHub</a>
+                {% endif %}
+
+                {% if publication.pdf %}
+                <a href="{{ publication.get_absolute_url }}" class="card-link d-inline-flex p-2"><i
+                        class="bi bi-file-earmark-pdf me-1"></i>PDF</a>
+                {% endif %}
+            </div>
+        </div>
+        <div>
+            <div id="collapse-{{ publication.slug }}" class="accordion-collapse collapse card-body"
+                aria-labelledby="heading-{{ publication.slug }}" data-bs-parent="#accordion">
+                <div class="accordion-body">
+                    {% if publication.doi %}
+                    <p>DOI: <a href="{{ publication.doi_url }}" target="_blank">{{ publication.doi }}</a></p>
+                    <span class="d-flex border border-top-0 border-primary mb-2"></span>
+                    {% endif %}
+                    <p class="fs-5">Abstract</p>
+                    <p>{{ publication.abstract }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
