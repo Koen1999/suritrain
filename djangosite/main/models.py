@@ -28,7 +28,7 @@ class Pcap(Model):
         verbose_name_plural = "pcaps"
         ordering = ["title"]
 
-    def __str__(self):
+    def __str__(self) -> str:
         return str(self.title)
 
 
@@ -42,6 +42,9 @@ class Scenario(Model):
     class Meta:
         verbose_name_plural = "scenarios"
         ordering = ["-ordering_priority", "title"]
+
+    def __str__(self) -> str:
+        return str(self.title)
 
     @property
     def tests(self) -> BaseManager["Test"]:
@@ -57,9 +60,6 @@ class Scenario(Model):
             test__scenario=self, submission__scenario=self
         ).all()
 
-    def __str__(self):
-        return str(self.title)
-
 
 class Test(Model):
     title = CharField(max_length=64)
@@ -72,12 +72,12 @@ class Test(Model):
         verbose_name_plural = "tests"
         ordering = ["scenario", "hidden", "-expected", "title"]
 
+    def __str__(self) -> str:
+        return str(self.title)
+
     @property
     def results(self) -> BaseManager["Result"]:
         return Result.objects.filter(test=self).all()
-
-    def __str__(self):
-        return str(self.title)
 
 
 class Submission(Model):
@@ -87,11 +87,15 @@ class Submission(Model):
     submitted_at = DateTimeField(auto_now_add=True)
     check_only = BooleanField()
     valid = BooleanField()
+    suricata_output = TextField()
     tested = BooleanField(default=False)
 
     class Meta:
         verbose_name_plural = "submissions"
         ordering = ["-submitted_at"]
+
+    def __str__(self) -> str:
+        return str((self.scenario, self.user, self.submitted_at))
 
     @property
     def results(self) -> BaseManager["Result"]:
@@ -114,9 +118,6 @@ class Submission(Model):
             return None
         return self.results.aggregate(Sum("score"))["score__sum"]
 
-    def __str__(self):
-        return str((self.scenario, self.user, self.submitted_at))
-
 
 class Result(Model):
     submission = ForeignKey(Submission, on_delete=CASCADE)
@@ -133,3 +134,11 @@ class Result(Model):
     class Meta:
         verbose_name_plural = "results"
         ordering = ["-generated_at"]
+
+
+class UserPreferences(Model):
+    user = ForeignKey(User, on_delete=CASCADE)
+    research_consent = BooleanField(default=False)
+
+    class Meta:
+        verbose_name_plural = "user preferences"

@@ -62,6 +62,7 @@ RUN npm install --omit=dev \
 
 RUN useradd -ms /bin/bash uwsgi
 RUN usermod -aG www-data uwsgi
+RUN usermod -aG suricata uwsgi
 RUN chown uwsgi:www-data -R .
 
 ADD . /djangosite/

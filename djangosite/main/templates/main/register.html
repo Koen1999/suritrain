@@ -2,10 +2,10 @@
 {% load static %}
 
 {% block title %}
-ANONYMIZED - CTF Website - Login
+ANONYMIZED - CTF Website - Register
 {% endblock %}
 {% block title2 %}
-ANONYMIZED - CTF Website - Login
+ANONYMIZED - CTF Website - Register
 {% endblock %}
 
 {% block description %}
@@ -29,40 +29,51 @@ Network Security Research, Intrusion Detection, Incident Response, Digital Foren
             <p>The registration form contains errors. Please try again.</p>
             {% endif %}
 
-            <form method="post" action="{% url 'main:register' %}">
+            <form class="my-1" method="post" action="{% url 'main:register' %}">
                 {% csrf_token %}
+                {% if REGISTRATION_PASSWORD %}
+                <div class="form-group my-1">
+                    <label for="id_code">Registration Code</label>
+                    <input type="text" class="form-control" name="code" autocapitalize="none" maxlength="32" required="" id="id_code" placeholder="Enter reigstration code">
+                    {{ form.code.errors }}
+                </div>
+                {% endif %}
                 <div class="form-group my-1">
                     <label for="id_email">Email address</label>
-                    <input type="email" class="form-control" name="email" value="ANONYMIZED" class="vTextField" maxlength="254" id="id_email">
+                    <input type="email" class="form-control" name="email" autofocus="" autocapitalize="none" autocomplete="email" required="" class="vTextField" maxlength="254" id="id_email" placeholder="user@foo.bar">
                     {{ form.email.errors }}
                 </div>
                 <div class="form-group my-1">
                     <label for="id_username">Username</label>
-                    <input type="text" class="form-control" name="username" autofocus="" autocapitalize="none" autocomplete="username" maxlength="32" required="" id="id_username" placeholder="Enter username">
+                    <input type="text" class="form-control" name="username" autocapitalize="none" autocomplete="username" maxlength="32" required="" id="id_username" placeholder="Enter username">
                     {{ form.username.errors }}
                 </div>
                 <div class="form-group my-1">
                     <label for="id_password1">Password</label>
-                    <input type="password" class="form-control" name="password1" autocomplete="current-password" required="" id="id_password1" placeholder="Enter password">
+                    <input type="password" class="form-control" name="password1" autocapitalize="none" autocomplete="current-password" required="" id="id_password1" placeholder="Enter password">
                     {{ form.password1.errors }}
                 </div>
                 <div class="form-group my-1">
                     <label for="id_password2">Confirm Password</label>
-                    <input type="password" class="form-control" name="password2" required="" id="id_password2" placeholder="Repeat password">
+                    <input type="password" class="form-control" name="password2" autocapitalize="none" required="" id="id_password2" placeholder="Repeat password">
                     {{ form.password2.errors }}
                 </div>
-                <div class="form-check my-1">
-                    <label for="id_accept_informed_consent" class="form-check-label">I declare that:
-                        <ul>
-                            <li>I am aware the CTF is set up as a research experiment to learn more about how intrusion detection rules are written and the effects thereof; and</li>
-                            <li>I have reviewed the informed consent form (<a href="/static/pdf/informed_consent.pdf" rel="nofollow" target="_blank" class="m-1 d-inline-flex"><i class="bi bi-download me-1"></i>Click here to download</a>) and <strong>I hereby consent to the contents of the informed consent form</strong>; and</li>
-                            <li>I am intend to take the intake questionaire and submit them to fullfil the <em>required prerequisites</em> for participating in the CTF; and</li>
-                            <li>ANONYMIZED; and</li>
-                            <li>I am intend to take the short outtake questionaire and submit them after having participated in the CTF.</li>
-                        </ul> 
+                <div class="form-group my-1">
+                    <label class="form-check-label">I give permission to use data submitted through this platform anonymously for research to learn more about how intrusion detection rules are written and the effects thereof.
                     </label>
-                    <input type="checkbox" class="form-check-input" name="accept_informed_consent" required="" id="id_accept_informed_consent">
-                    {{ form.accept_informed_consent.errors }}
+                    {{ form.informed_consent.errors }}
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="informed_consent" id="id_option_accept_informed_consent" value=true>
+                        <label class="form-check-label" for="id_option_accept_informed_consent">
+                            I give permission.
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="informed_consent" id="id_option_deny_informed_consent" value=false>
+                        <label class="form-check-label" for="id_option_deny_informed_consent">
+                            I do not give permission.
+                        </label>
+                    </div>
                 </div>
                 <button type="submit" class="btn btn-primary my-1">Submit</button>
                 <input type="hidden" name="next" value="{{ next }}">

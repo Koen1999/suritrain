@@ -1,0 +1,53 @@
+{% extends "main/base.html" %}
+{% load static %}
+
+{% block title %}
+ANONYMIZED - CTF Website - Dashboard Scenario User
+{% endblock %}
+{% block title2 %}
+ANONYMIZED - CTF Website - Dashboard Scenario User
+{% endblock %}
+
+{% block description %}
+{% endblock %}
+
+{% block keywords %}
+Network Security Research, Intrusion Detection, Incident Response, Digital Forensics, ANONYMIZED
+{% endblock %}
+
+{% block opengraph %}
+{% endblock %}
+
+{% block preload %}
+{% endblock %}
+
+{% block content %}
+<div class="container-sm">
+  <h2 class="pt-4">Dashboard {{scenario.title}} Scenario - {{user.username}} ({{user.id}})</h2>
+  <p class="lead"><small>Visualizations are not live and may show results from up to several minutes ago.</small></p>
+    <div class="row">
+    <div class="col-sm-6">
+      <figure class="figure">
+        <img
+          src="data:image/png;base64,{{image_engineering_process_base64}}"
+          class="figure-img img-fluid"
+        />
+        <figcaption class="figure-caption">
+            An overview of of the rule engineering process followed by
+trainee {{user.id}} in the {{scneario.title}} scenario
+        </figcaption>
+      </figure>
+    </div>
+    <div class="col-sm-12">
+      <h3 class="pt-3">Rules</h3>
+      {% for rule in rules %}
+       <p>{{rule}}</p>
+      {% endfor %}
+    </div>
+  </div>
+
+</div>
+{% endblock %}
+
+{% block scripts %}
+{% endblock %}

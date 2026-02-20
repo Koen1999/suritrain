@@ -9,5 +9,6 @@ chmod -R ug=rwx,o-rwx /djangosite_dynamic
 chmod -R ug=rwx,o-rwx /djangosite_data
 
 /venv/bin/python3 manage.py starttestservice &
+/venv/bin/python3 manage.py dashboard &
 
 /venv/bin/uwsgi --ini djangosite/uwsgi.ini

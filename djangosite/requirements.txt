@@ -16,3 +16,6 @@ suricata-check[performance,ml]>=0.5.4beta0
 cacheout
 levenshtein
 multiset
+numpy
+matplotlib
+seaborn

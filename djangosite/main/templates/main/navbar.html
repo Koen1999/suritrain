@@ -4,15 +4,17 @@
         <ul class="navbar-nav container-fluid justify-content-md-center">
             <li class="nav-item"><a class="nav-link fs-5" href="{% url 'main:leaderboard' %}"><h3>Leaderboard</h3></a></li>
             <li class="nav-item"><a class="nav-link fs-5" href="{% url 'main:scenarios' %}"><h3>Scenarios</h3></a></li>
-            {% comment %} {% if not user.is_authenticated %}
+            {% if not user.is_authenticated and REGISTRATION_ALLOWED %}
             <li class="nav-item"><a class="nav-link fs-5" href="{% url 'main:register' %}"><h3>Register</h3></a></li>
-            {% endif %} {% endcomment %}
+            {% endif %}
+            {% if user.is_authenticated and user.is_staff %}
+                <li class="nav-item"><a class="nav-link fs-5" href="{% url 'main:dashboard' %}"><h3>Dashboard</h3></a></li>
+            {% endif %}
             <div class="vr mx-3"></div>
             <li class="nav-item"><a class="nav-link fs-6" href="https://docs.suricata.io/en/suricata-7.0.7/rules/" rel="nofollow" target="_blank" ><h4><i class="bi bi-info-circle me-1"></i>Suricata Docs</h4></a></li>
             {% if user.is_authenticated %}
                 <li class="nav-item"><a class="nav-link fs-6" href="{% url 'main:handout' %}" rel="nofollow" target="_blank" ><h4><i class="bi bi-file-earmark-pdf me-1"></i>Handout</h4></a></li>
             {% endif %}
-            <li class="nav-item"><a class="nav-link fs-6" href="https://m365.cloud.microsoft/chat" rel="nofollow" target="_blank" ><h4><i class="bi bi-robot me-1"></i>Copilot</h4></a></li>
             <li class="nav-item dropstart position-absolute end-0 mx-2">
                 <a class="nav-link dropdown-toggle fs-5" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                     Account

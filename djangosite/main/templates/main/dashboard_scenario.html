@@ -1,0 +1,179 @@
+{% extends "main/base.html" %}
+{% load static %}
+
+{% block title %}
+ANONYMIZED - CTF Website - Dashboard Scenario
+{% endblock %}
+{% block title2 %}
+ANONYMIZED - CTF Website - Dashboard Scenario
+{% endblock %}
+
+{% block description %}
+{% endblock %}
+
+{% block keywords %}
+Network Security Research, Intrusion Detection, Incident Response, Digital Forensics, ANONYMIZED
+{% endblock %}
+
+{% block opengraph %}
+{% endblock %}
+
+{% block preload %}
+{% endblock %}
+
+{% block content %}
+<div class="container-sm">
+  <h2 class="pt-4">Dashboard {{scenario.title}} Scenario</h2>
+  <p class="lead">
+    <small
+      >Visualizations are not live and may show results from up to several
+      minutes ago.</small
+    >
+  </p>
+  <div class="row">
+    <div class="col-sm-12">
+      <figure class="figure">
+        <img
+          src="data:image/png;base64,{{image_tests_success_failure_base64}}"
+          class="figure-img img-fluid"
+        />
+        <figcaption class="figure-caption">
+          An overview of the number of trainees that succeed/fail each test
+          associated with the {{scenario.title}} scenario.
+        </figcaption>
+      </figure>
+    </div>
+    <div class="col-sm-6">
+      <figure class="figure">
+        <img
+          src="data:image/png;base64,{{image_design_principle_adherence_base64}}"
+          class="figure-img img-fluid"
+        />
+        <figcaption class="figure-caption">
+          An overview of the adherence of rules to the design principles for the
+          {{scenario.title}} scenario.
+        </figcaption>
+      </figure>
+    </div>
+    <div class="col-sm-12">
+      <h3 class="pt-3">Design principle violating rules</h3>
+      <div class="accordion py-3" id="accordion">
+        {% for principle, rules in inadhering_rules.items %}
+        <div class="accordion-item card my-3">
+          <div class="accordion-header" id="heading-{{error|slugify}}">
+            <button
+              class="accordion-button card collapsed"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#collapse-{{error|slugify}}"
+              aria-expanded="false"
+              aria-controls="collapse-{{error|slugify}}"
+            >
+              <span class="card-title fs-6 fw-bold text-center">
+                {{ principle }}
+              </span>
+            </button>
+          </div>
+          <div>
+            <div
+              id="collapse-{{error|slugify}}"
+              class="accordion-collapse card-body collapse"
+              aria-labelledby="heading-{{error|slugify}}"
+              data-bs-parent="#accordion"
+              style=""
+            >
+              <div class="accordion-body">
+                {% for rule in rules %}
+                <p>
+                  {{rule}}
+                </p>
+                {% endfor %}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {% endfor %}
+      </div>
+    </div>
+
+    <div class="col-sm-12">
+      <h3 class="pt-3">False positives</h3>
+      <div class="accordion py-3" id="accordion">
+        {% for test, fps in tests_fps.items %}
+        <div class="accordion-item card my-3">
+          <div class="accordion-header" id="heading-{{test|slugify}}">
+            <button
+              class="accordion-button card collapsed"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#collapse-{{test|slugify}}"
+              aria-expanded="false"
+              aria-controls="collapse-{{test|slugify}}"
+            >
+              <span class="card-title fs-6 fw-bold text-center">
+                {{ test }}
+              </span>
+            </button>
+          </div>
+          <div>
+            <div
+              id="collapse-{{test|slugify}}"
+              class="accordion-collapse card-body collapse"
+              aria-labelledby="heading-{{test|slugify}}"
+              data-bs-parent="#accordion"
+              style=""
+            >
+              <div class="accordion-body">
+                {% for dict in fps %}
+                <div class="card">
+                  <div class="card-body">
+                    <h5 class="card-title"><b>{{dict.count}} FPs</b>: {{dict.flow_tuple}}</h5>
+                    <p class="card-text">{{dict.decoded_payload}}</p>
+                  </div>
+                  <div class="card-body">
+                    {% for rule in dict.rules %}
+                      <p class="card-text">{{rule}}</p>
+                    {% endfor %}
+                  </div>
+                </div>
+                {% endfor %}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {% endfor %}
+      </div>
+    </div>
+    
+    <div class="col-sm-12">
+      <figure class="figure">
+        <img
+          src="data:image/png;base64,{{image_participant_performance_base64}}"
+          class="figure-img img-fluid"
+        />
+        <figcaption class="figure-caption">
+          An overview of the number of trainees that succeed/fail each test associated with the {{scenario.title}} scenario.
+        </figcaption>
+      </figure>
+    </div>
+  </div>
+  <h2 class="pt-5">Dashboard Navigation</h2>
+  <li>
+    Users:
+    <ul>
+      {% for user in users %}
+      <li>
+        <a href="{% url 'main:dashboard_scenario_user' scenario.id user.id %}"
+          >{{ user.username }} ({{user.id}})</a
+        >
+      </li>
+      {% endfor %}
+    </ul>
+  </li>
+</div>
+{% endblock %}
+
+{% block scripts %}
+{% endblock %}

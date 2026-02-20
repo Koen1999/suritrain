@@ -10,7 +10,7 @@ logger = logging.getLogger(__name__)
 class Command(BaseCommand):
     help = "Detect incompletely tested submissions and retest them."
 
-    def handle(self, *args, **options):
+    def handle(self, *args, **options) -> None:  # noqa: ANN002, ANN003, ARG002
         # Find submissions marked as tested but with incomplete results
         incomplete = False
         for scenario in Scenario.objects.all():
@@ -34,5 +34,3 @@ class Command(BaseCommand):
             logger.warning("Incomplete test results detected and marked for retesting.")
         else:
             logger.info("No incomplete test results detected.")
-
-        return

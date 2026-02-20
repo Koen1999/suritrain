@@ -10,17 +10,13 @@ from typing import Optional
 import cacheout
 import idstools
 import idstools.rule
+from django.conf import settings
 from django.contrib.auth.models import AbstractBaseUser, User
 from django.utils.timezone import localtime
 
 from .models import Result, Scenario, Submission
 
 logger = logging.getLogger(__name__)
-
-
-REQUIRE_SCENARIO_UNLOCKING = True
-UNLOCK_AFTER_SECONDS = 60 * 5
-UNLOCK_AFTER_COMPLETION = True
 
 
 def format_rule(rule: str) -> Optional[str]:
@@ -36,16 +32,14 @@ def format_rule(rule: str) -> Optional[str]:
 
 
 def __highlight_with_color(string: str, colorcode: str) -> str:
-    string = """\
+    return """\
 <b style="color:{}">{}</b>\
 """.format(
         colorcode, string
     )
 
-    return string
 
-
-def __highlight_character(string: str, in_string, escape) -> str:
+def __highlight_character(string: str, in_string: bool, escape: bool) -> str:
     if string == '"' and not escape:
         return __highlight_with_color(string, "#FF22CC")
 
@@ -92,7 +86,7 @@ def __escape(string: str) -> str:
     return string.replace("<", "&lt;").replace(">", "&gt;")
 
 
-def __conditional_format_value(value: Optional[str]):
+def __conditional_format_value(value: Optional[str]) -> str:
     if value is None:
         return ""
 
@@ -104,12 +98,12 @@ def __conditional_format_value(value: Optional[str]):
     )
 
 
-def format_rule_html(input: Optional[str]) -> Optional[str]:
-    if input is None:
+def format_rule_html(input_str: Optional[str]) -> Optional[str]:
+    if input_str is None:
         return None
 
     rules_html: list[str] = []
-    for rule in input.split("\n"):
+    for rule in input_str.split("\n"):
         try:
             parsed_rule: idstools.rule.Rule = idstools.rule.parse(rule.strip())
 
@@ -205,6 +199,7 @@ def validate_rule(rule: str) -> tuple[bool, str]:
         ["suricata", "-T", "-v", "-S", path, "-l", log_path],
         capture_output=True,
         text=True,
+        check=False,
     )
 
     rule_loaded = True
@@ -233,19 +228,24 @@ def get_user_scenario_hash(user: AbstractBaseUser, scenario: Scenario) -> str:
 
 
 @lru_cache(maxsize=128)
-def get_user_ordered_scenarios(user: AbstractBaseUser) -> list[Scenario]:
-    scenarios = sorted(
+def get_user_ordered_scenarios(user: User) -> list[Scenario]:
+    if not getattr(settings, "RANDOMIZED_SCENARIO_ORDER") or user.is_staff:
+        return list(Scenario.objects.order_by("-ordering_priority", "title").all())
+
+    return sorted(
         Scenario.objects.all(),
         key=lambda scenario: str(scenario.ordering_priority)
         + "-"
         + get_user_scenario_hash(user, scenario),
         reverse=True,
     )
-    return scenarios
 
 
-def is_scenario_unlocked(user: AbstractBaseUser, scenario: Scenario) -> bool:
-    if not REQUIRE_SCENARIO_UNLOCKING:
+def is_scenario_unlocked(user: User, scenario: Scenario) -> bool:
+    if user.is_staff:
+        return True
+
+    if not getattr(settings, "REQUIRE_SCENARIO_UNLOCKING"):
         return True
 
     scenarios = get_user_ordered_scenarios(user)
@@ -256,42 +256,41 @@ def is_scenario_unlocked(user: AbstractBaseUser, scenario: Scenario) -> bool:
 
     previous_scenario = scenarios[scenario_i - 1]
 
-    if UNLOCK_AFTER_SECONDS >= 0:
+    if getattr(settings, "UNLOCK_AFTER_SECONDS") >= 0:
         unlocked_by_time = Submission.objects.filter(
             scenario=previous_scenario,
             user=user,
             submitted_at__lte=localtime()
-            - datetime.timedelta(seconds=UNLOCK_AFTER_SECONDS),
+            - datetime.timedelta(seconds=getattr(settings, "UNLOCK_AFTER_SECONDS")),
             valid=True,
         ).exists()
         if unlocked_by_time:
             return True
 
-    if UNLOCK_AFTER_COMPLETION:
-        for submission in Submission.objects.filter(
-            scenario=previous_scenario,
-            user=user,
-            valid=True,
-            check_only=False,
-            tested=True,
-        ):
-            unlocked_by_completion_expected = Result.objects.filter(
-                submission=submission,
-                test__expected=True,
-                test__hidden=False,
-                status="Success",
-            ).exists()
-            unlocked_by_completion_unexpected = Result.objects.filter(
-                submission=submission,
-                test__expected=False,
-                test__hidden=False,
-                status="Success",
-            ).exists()
-            unlocked_by_completion = (
-                unlocked_by_completion_expected and unlocked_by_completion_unexpected
-            )
-            if unlocked_by_completion:
-                return True
+    for submission in Submission.objects.filter(
+        scenario=previous_scenario,
+        user=user,
+        valid=True,
+        check_only=False,
+        tested=True,
+    ):
+        unlocked_by_completion_expected = Result.objects.filter(
+            submission=submission,
+            test__expected=True,
+            test__hidden=False,
+            status="Success",
+        ).exists()
+        unlocked_by_completion_unexpected = Result.objects.filter(
+            submission=submission,
+            test__expected=False,
+            test__hidden=False,
+            status="Success",
+        ).exists()
+        unlocked_by_completion = (
+            unlocked_by_completion_expected and unlocked_by_completion_unexpected
+        )
+        if unlocked_by_completion:
+            return True
 
     return False
 
@@ -319,7 +318,12 @@ _cache_get_user_scenario_scores = cacheout.Cache(maxsize=8192)
 
 
 @_cache_get_user_scenario_scores.memoize(ttl=60)
-def get_user_scenario_scores(user: User, scenario: Scenario):
+def get_user_scenario_scores(user: User, scenario: Scenario) -> tuple[
+    Optional[int],
+    Optional[datetime.datetime],
+    Optional[int],
+    Optional[datetime.datetime],
+]:
     best_submission_score = -100
     best_submission_submitted_at = None
     best_submission_hidden_score = -100
@@ -360,7 +364,12 @@ _cache_get_user_scores = cacheout.Cache(maxsize=1024)
 
 
 @_cache_get_user_scores.memoize(ttl=15)
-def get_user_scores(user: User, force_datetime=False):
+def get_user_scores(user: User, force_datetime: bool = False) -> tuple[
+    Optional[int],
+    Optional[datetime.datetime],
+    Optional[int],
+    Optional[datetime.datetime],
+]:
     score = 0
     obtained_at = datetime.datetime.fromisoformat("2000-01-01 00:00:00+00:00")
     staff_score = 0
@@ -374,13 +383,20 @@ def get_user_scores(user: User, force_datetime=False):
             best_submission_hidden_submitted_at,
         ) = get_user_scenario_scores(user, scenario)
 
-        if best_submission_submitted_at is not None and best_submission_score > 0:
+        if (
+            best_submission_submitted_at is not None
+            and best_submission_score is not None
+            and best_submission_score > 0
+            and best_submission_submitted_at is not None
+        ):
             score += best_submission_score
             obtained_at = max(obtained_at, best_submission_submitted_at)
 
         if (
             best_submission_hidden_submitted_at is not None
+            and best_submission_hidden_score is not None
             and best_submission_hidden_score > 0
+            and best_submission_hidden_submitted_at is not None
         ):
             staff_score += best_submission_hidden_score
             staff_obtained_at = max(
@@ -399,12 +415,12 @@ def get_user_scores(user: User, force_datetime=False):
     return score, obtained_at, staff_score, staff_obtained_at
 
 
-def delete_cache(user: User, scenario: Scenario):
+def delete_cache(user: User, scenario: Scenario) -> None:
     result = get_user_scenario_scores.cache.delete(
         get_user_scenario_scores.cache_key(user, scenario)
     )
 
     if result == 1:
         logger.debug(
-            f"Deleted cache for user {user.username} and scenario {scenario.title}"
+            "Deleted cache for user %s and scenario %s", user.username, scenario.title
         )

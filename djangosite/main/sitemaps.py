@@ -1,5 +1,7 @@
-from django.contrib.sitemaps import Sitemap
+from datetime import date
+
 from django.apps import apps
+from django.contrib.sitemaps import Sitemap
 
 app_config = apps.get_app_config("main")
 
@@ -11,11 +13,11 @@ class StaticViewSitemap(Sitemap):
 
     mapping = {"index": ""}
 
-    def items(self):
+    def items(self) -> list[str]:
         return list(self.mapping.keys())
 
-    def location(self, item):
-        return self.mapping[item]
+    def location(self, obj) -> str:  # noqa: ANN001
+        return self.mapping[obj]
 
-    def lastmod(self, item):
+    def lastmod(self, item) -> date:  # noqa: ANN001, ARG002
         return app_config.startup_date

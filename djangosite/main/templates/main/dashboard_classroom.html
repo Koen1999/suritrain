@@ -1,0 +1,107 @@
+{% extends "main/base.html" %}
+{% load static %}
+
+{% block title %}
+ANONYMIZED - CTF Website - Dashboard
+{% endblock %}
+{% block title2 %}
+ANONYMIZED - CTF Website - Dashboard
+{% endblock %}
+
+{% block description %}
+{% endblock %}
+
+{% block keywords %}
+Network Security Research, Intrusion Detection, Incident Response, Digital Forensics, ANONYMIZED
+{% endblock %}
+
+{% block opengraph %}
+{% endblock %}
+
+{% block preload %}
+{% endblock %}
+
+{% block content %}
+<div class="container-sm">
+  <h2 class="pt-4">Dashboard Classroom</h2>
+  <p class="lead">
+    <small
+      >Visualizations are not live and may show results from up to several
+      minutes ago.</small
+    >
+  </p>
+  <div class="row">
+    <div class="col-sm-6">
+      <figure class="figure">
+        <img
+          src="data:image/png;base64,{{image_boxplot_precision_recall_base64}}"
+          class="figure-img img-fluid"
+        />
+        <figcaption class="figure-caption">
+          Boxplots depicting common precision and recall scores on both the
+          visible and invisible tests of all trainees of the experiment.
+        </figcaption>
+      </figure>
+    </div>
+    <div class="col-sm-12">
+      <h3 class="pt-3">Participant syntax errors</h3>
+      <div class="accordion py-3" id="accordion">
+        {% for error, dict in syntax_errors.items %}
+        <div class="accordion-item card my-3">
+          <div class="accordion-header" id="heading-{{error|slugify}}">
+            <button
+              class="accordion-button card collapsed"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#collapse-{{error|slugify}}"
+              aria-expanded="false"
+              aria-controls="collapse-{{error|slugify}}"
+            >
+              <span class="card-title fs-6 fw-bold text-center">
+                {{ dict.count }} participants
+              </span>
+              <p>{{ error }}</p>
+            </button>
+          </div>
+          <div>
+            <div
+              id="collapse-{{error|slugify}}"
+              class="accordion-collapse card-body collapse"
+              aria-labelledby="heading-{{error|slugify}}"
+              data-bs-parent="#accordion"
+              style=""
+            >
+              <div class="accordion-body">
+                {% for rule in dict.rules %}
+                <p>
+                  {{rule}}
+                </p>
+                {% endfor %}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+  <h2 class="pt-5">Dashboard Navigation</h2>
+
+  <li>
+    Scenarios:
+    <ul>
+      {% for scenario in scenarios %}
+      <li>
+        <a href="{% url 'main:dashboard_scenario' scenario.id %}"
+          >{{ scenario.title }}</a
+        >
+      </li>
+      {% endfor %}
+    </ul>
+  </li>
+</div>
+{% endblock %}
+
+{% block scripts %}
+{% endblock %}

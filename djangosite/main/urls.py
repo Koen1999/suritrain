@@ -9,7 +9,7 @@ app_name = "main"
 
 urlpatterns = [
     path("", views.index, name="index"),
-    # path("register", views.register, name="register"),
+    path("register", views.register, name="register"),
     path(
         "login",
         auth_views.LoginView.as_view(template_name="main/login.html"),
@@ -33,6 +33,17 @@ urlpatterns = [
     path("submit/<int:scenario_id>", views.submit, name="submit"),
     path("status/<int:scenario_id>", views.status, name="status"),
     path("handout", views.handout, name="handout"),
+    path("dashboard", views.dashboard, name="dashboard"),
+    path(
+        "dashboard/scenario/<int:scenario_id>",
+        views.dashboard_scenario,
+        name="dashboard_scenario",
+    ),
+    path(
+        "dashboard/<int:scenario_id>/<int:user_id>",
+        views.dashboard_scenario_user,
+        name="dashboard_scenario_user",
+    ),
 ]
 
 urlpatterns += [

@@ -12,12 +12,10 @@ logger = logging.getLogger(__name__)
 class Command(BaseCommand):
     help = "Stops workers for the TestService in the background and restarts the test service."
 
-    def handle(self, *args, **options):
+    def handle(self, *args, **options) -> None:  # noqa: ANN002, ANN003, ARG002
         TestService.stop()
 
         time.sleep(5)
 
         Result.objects.all().delete()
         Submission.objects.all().update(tested=False)
-
-        return

@@ -1,0 +1,38 @@
+{% extends "main/base.html" %}
+{% load static %}
+
+{% block title %}
+ANONYMIZED - CTF Website - Dashboard Loading
+{% endblock %}
+{% block title2 %}
+ANONYMIZED - CTF Website - Dashboard Loading
+{% endblock %}
+
+{% block description %}
+{% endblock %}
+
+{% block keywords %}
+Network Security Research, Intrusion Detection, Incident Response, Digital Forensics, ANONYMIZED
+{% endblock %}
+
+{% block opengraph %}
+{% endblock %}
+
+{% block preload %}
+{% endblock %}
+
+{% block content %}
+<div class="container-sm">
+    <h2 class="pt-4">Dashboard Loading</h2>
+    <p class="lead">The dashboard is currently being loaded. Please wait...</p>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    function autoRefresh() {
+        location.reload();
+    }
+    setInterval('autoRefresh()', 1000);
+</script>
+{% endblock %}

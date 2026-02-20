@@ -60,17 +60,17 @@ def grade_intake_pilot(df_in: DataFrame) -> DataFrame:
             self_graded_computer_security = 2
         elif (
             self_graded_computer_security
-            == "I am familiar with offensive computer security and am familiar with the basic concepts of techniques such as Scanning, XSS, and Persistence."
+            == "I am familiar with offensive computer security and am familiar with the basic concepts of techniques such as Scanning, XSS, and Persistence."  # noqa: E501
         ):
             self_graded_computer_security = 3
         elif (
             self_graded_computer_security
-            == "I am familiar with offensive computer security and have previously applied at least one offensive computer security technique."
+            == "I am familiar with offensive computer security and have previously applied at least one offensive computer security technique."  # noqa: E501
         ):
             self_graded_computer_security = 4
         elif (
             self_graded_computer_security
-            == "I am familiar with offensive computer security and have previously applied several different offensive computer security techniques."
+            == "I am familiar with offensive computer security and have previously applied several different offensive computer security techniques."  # noqa: E501
         ):
             self_graded_computer_security = 5
         else:
@@ -85,7 +85,7 @@ def grade_intake_pilot(df_in: DataFrame) -> DataFrame:
             self_graded_wireshark = 2
         elif (
             self_graded_wireshark
-            == "I have previously used Wireshark to inspect PCAPs but am not familiar with features such as network statistics or decoding of data."
+            == "I have previously used Wireshark to inspect PCAPs but am not familiar with features such as network statistics or decoding of data."  # noqa: E501
         ):
             self_graded_wireshark = 3
         elif (
@@ -116,7 +116,7 @@ def grade_intake_pilot(df_in: DataFrame) -> DataFrame:
             self_graded_intrusion_detection = 2
         elif (
             self_graded_intrusion_detection
-            == "I know about a specific intrusion detection method, but do not know how any specific intrusion detection method works."
+            == "I know about a specific intrusion detection method, but do not know how any specific intrusion detection method works."  # noqa: E501
         ):
             self_graded_intrusion_detection = 3
         elif (
@@ -166,12 +166,12 @@ def grade_intake_pilot(df_in: DataFrame) -> DataFrame:
             self_graded_english = 2
         elif (
             self_graded_english
-            == "I regularly speak and write English including professionally (study or work) but do not understand complicated expert texts (i.e. research papers, or legal texts)"
+            == "I regularly speak and write English including professionally (study or work) but do not understand complicated expert texts (i.e. research papers, or legal texts)"  # noqa: E501
         ):
             self_graded_english = 3
         elif (
             self_graded_english
-            == "I regularly speak and write English including professionally (study or work) and can understand complicated expert texts (i.e. research papers, or legal texts), but do not frequently communicate expert topics in English."
+            == "I regularly speak and write English including professionally (study or work) and can understand complicated expert texts (i.e. research papers, or legal texts), but do not frequently communicate expert topics in English."  # noqa: E501
         ):
             self_graded_english = 4
         elif self_graded_english.startswith(
@@ -306,7 +306,7 @@ def grade_intake_pilot(df_in: DataFrame) -> DataFrame:
         quiz_ocs_xss_correct = [
             "XSS attacks may be prevented through input sanitization.",
             "XSS attacks can be used to steal credentials.",
-            "During a successful XSS attack the attacker may execute malicious code within the web browsers of other users visiting a website.",
+            "During a successful XSS attack the attacker may execute malicious code within the web browsers of other users visiting a website.",  # noqa: E501
         ]
         quiz_ocs_xss_incorrect = [
             "During a successful XSS attack malicious code is executed on a server distributing content.",
@@ -343,8 +343,8 @@ def grade_intake_pilot(df_in: DataFrame) -> DataFrame:
             "Metasploit is a tool that can be used to obtain persistence.",
         ]
         quiz_ocs_persistence_incorrect = [
-            "Persistence always implies malware will remain present after reinstallation of the operating system following a malware infection.",
-            "Persistence always implies malware will be executed at some point during the boot process of the infected machine.",
+            "Persistence always implies malware will remain present after reinstallation of the operating system following a malware infection.",  # noqa: E501
+            "Persistence always implies malware will be executed at some point during the boot process of the infected machine.",  # noqa: E501
             "In order to obtain persistence, malware must add an executable file to the startup folder on Windows.",
             "Persistence must be acquired in order for malware to accomplish its goal.",
         ]
@@ -422,7 +422,7 @@ def grade_intake_pilot(df_in: DataFrame) -> DataFrame:
             "Inspecting response headers",
             "Inspecting the raw bytes transmitted as part of the HTTP request headers",
             "Inspecting decoded data transmitted over HTTP",
-            "Inspecting data transmitted as part of the TCP stream of which the HTTP stream is part",  # Drop, it's too ambiguous
+            "Inspecting data transmitted as part of the TCP stream of which the HTTP stream is part",  # Drop, it's too ambiguous  # noqa: E501
         ]
         quiz_wireshark_stream_incorrect = []
         quiz_wireshark_stream = 0
@@ -446,9 +446,9 @@ def grade_intake_pilot(df_in: DataFrame) -> DataFrame:
 
         quiz_ids_definition = int(
             row[
-                "Which description best describes the difference between signature-based and anomaly-based intrusion detection methods?\n"
+                "Which description best describes the difference between signature-based and anomaly-based intrusion detection methods?\n"  # noqa: E501
             ]
-            == "Signature-based intrusion detection methods primarily rely on knowledge of malicious behaviors whereas anomaly-based intrusion detection methods primarily rely on knowledge of benign behaviors"
+            == "Signature-based intrusion detection methods primarily rely on knowledge of malicious behaviors whereas anomaly-based intrusion detection methods primarily rely on knowledge of benign behaviors"  # noqa: E501
         )
 
         quiz_ids_issues_answer = (
@@ -570,13 +570,13 @@ def grade_intake_pilot(df_in: DataFrame) -> DataFrame:
 
         quiz_suricata_match_answer = (
             row[
-                """Which of the following buffers would be matched by the following sequence of Suricata options: \n\ncontent:"FOO"; content:"bar"; depth:5;\n"""
+                """Which of the following buffers would be matched by the following sequence of Suricata options: \n\ncontent:"FOO"; content:"bar"; depth:5;\n"""  # noqa: E501
             ]
             .strip(";")
             .split(";")
             if not pandas.isna(
                 row[
-                    """Which of the following buffers would be matched by the following sequence of Suricata options: \n\ncontent:"FOO"; content:"bar"; depth:5;\n"""
+                    """Which of the following buffers would be matched by the following sequence of Suricata options: \n\ncontent:"FOO"; content:"bar"; depth:5;\n"""  # noqa: E501
                 ]
             )
             else []
@@ -606,23 +606,23 @@ def grade_intake_pilot(df_in: DataFrame) -> DataFrame:
             x + ")" if not x[-1] == ")" else x
             for x in (
                 row[
-                    "Read the following Suricata documentation and select the factually correct statements one can derive from the given sentence.\n\n\n\nModifiers\n\nstartswith\nThe startswith keyword is similar to depth. It ta"
+                    "Read the following Suricata documentation and select the factually correct statements one can derive from the given sentence.\n\n\n\nModifiers\n\nstartswith\nThe startswith keyword is similar to depth. It ta"  # noqa: E501
                 ]
                 .strip(";")
                 .split(");")
                 if not pandas.isna(
                     row[
-                        "Read the following Suricata documentation and select the factually correct statements one can derive from the given sentence.\n\n\n\nModifiers\n\nstartswith\nThe startswith keyword is similar to depth. It ta"
+                        "Read the following Suricata documentation and select the factually correct statements one can derive from the given sentence.\n\n\n\nModifiers\n\nstartswith\nThe startswith keyword is similar to depth. It ta"  # noqa: E501
                     ]
                 )
                 else []
             )
         )
         quiz_english_docs_correct = [
-            """alert dns any any -> any 53 (msg:"DNS Request to google.com"; dns.query; dotprefix; content:".google.com"; startswith; sid:1;)"""
+            """alert dns any any -> any 53 (msg:"DNS Request to google.com"; dns.query; dotprefix; content:".google.com"; startswith; sid:1;)"""  # noqa: E501
         ]
         quiz_english_docs_incorrect = [
-            """alert dns any any -> any 53 (msg:"DNS Request to google.com"; dns.query; dotprefix; content:"google.com"; startswith; sid:1;)"""
+            """alert dns any any -> any 53 (msg:"DNS Request to google.com"; dns.query; dotprefix; content:"google.com"; startswith; sid:1;)"""  # noqa: E501
         ]
         quiz_english_docs = 0
         for answer in quiz_english_docs_correct:
@@ -643,13 +643,13 @@ def grade_intake_pilot(df_in: DataFrame) -> DataFrame:
             x + ")" if not x[-1] == ")" else x
             for x in (
                 row[
-                    "Read the following sentence and select the factually correct statements one can derive from the given sentence.\n\nAlice should not have sent flowers to Bob whereas Eve should have since Bob favors the "
+                    "Read the following sentence and select the factually correct statements one can derive from the given sentence.\n\nAlice should not have sent flowers to Bob whereas Eve should have since Bob favors the "  # noqa: E501
                 ]
                 .strip(";")
                 .split(");")
                 if not pandas.isna(
                     row[
-                        "Read the following sentence and select the factually correct statements one can derive from the given sentence.\n\nAlice should not have sent flowers to Bob whereas Eve should have since Bob favors the "
+                        "Read the following sentence and select the factually correct statements one can derive from the given sentence.\n\nAlice should not have sent flowers to Bob whereas Eve should have since Bob favors the "  # noqa: E501
                     ]
                 )
                 else []
@@ -686,27 +686,27 @@ def grade_intake_pilot(df_in: DataFrame) -> DataFrame:
         df_out_rows.append(
             {
                 "username": row[
-                    "What is the username you would like to reflect your performance on the leaderboard?\n\nNote: The leaderboard is visible to all participants. This can but does not need to be your real name. You can also"
+                    "What is the username you would like to reflect your performance on the leaderboard?\n\nNote: The leaderboard is visible to all participants. This can but does not need to be your real name. You can also"  # noqa: E501
                 ],
                 "Consent Age Reached": row[
-                    "Are you 16 years or older?\n\nNote: If you are younger than 16 years, you are not allowed to consent to participation in the research due to the legal age of consent in the Netherlands (but you can stil"
+                    "Are you 16 years or older?\n\nNote: If you are younger than 16 years, you are not allowed to consent to participation in the research due to the legal age of consent in the Netherlands (but you can stil"  # noqa: E501
                 ]
                 == "Yes",
                 "Informed Consent Granted": row[
-                    'By selecting "yes" below, I confirm:\n\n1.  I have enough information about the research project from the separate  information sheet. I have read it and I had the chance to ask questions,  which have b'
+                    'By selecting "yes" below, I confirm:\n\n1.  I have enough information about the research project from the separate  information sheet. I have read it and I had the chance to ask questions,  which have b'  # noqa: E501
                 ]
                 == "Yes",
                 "Gender": row["What is your gender?\n"],
                 "ISCED": isced,
                 "Control Question Correct": row[
-                    "This is a control question to see if you are reading the questions and answering them consciously. Please select the third option below.\n"
+                    "This is a control question to see if you are reading the questions and answering them consciously. Please select the third option below.\n"  # noqa: E501
                 ]
                 == "SSH",
                 "Intake Remarks": row.fillna("")[
                     "Do you have any feedback or remarks on the survey?\n"
                 ],
                 "Other Relevant Experiences": row.fillna("")[
-                    "Do you have any other relevant experiences (such as a job in this area or high expertise in another area you deem relevant) that may be relevant for the research? If so, describe the topic and the rel"
+                    "Do you have any other relevant experiences (such as a job in this area or high expertise in another area you deem relevant) that may be relevant for the research? If so, describe the topic and the rel"  # noqa: E501
                 ],
                 "Self Graded Networking": self_graded_networking,
                 "Self Graded Computer Security": self_graded_computer_security,
@@ -755,25 +755,25 @@ def grade_intake(df_in: DataFrame) -> DataFrame:
     for _, row in df_in.iterrows():
         if (
             row[
-                "Are you 16 years or older?\n\nNote: If you are younger than 16 years, you are not allowed to consent to participation in the research due to the legal age of consent in the Netherlands (but you can stil"
+                "Are you 16 years or older?\n\nNote: If you are younger than 16 years, you are not allowed to consent to participation in the research due to the legal age of consent in the Netherlands (but you can stil"  # noqa: E501
             ]
             != "Yes"
             or row[
-                'By selecting "yes" below, I confirm:\n\n1.  I have enough information about the research project from the separate  information sheet. I have read it and I had the chance to ask questions,  which have b'
+                'By selecting "yes" below, I confirm:\n\n1.  I have enough information about the research project from the separate  information sheet. I have read it and I had the chance to ask questions,  which have b'  # noqa: E501
             ]
             != "Yes"
         ):
             df_out_rows.append(
                 {
                     "username": row[
-                        "What is the username you would like to reflect your performance on the leaderboard?\n\nNote: The leaderboard is visible to all participants. This can but does not need to be your real name. You can also"
+                        "What is the username you would like to reflect your performance on the leaderboard?\n\nNote: The leaderboard is visible to all participants. This can but does not need to be your real name. You can also"  # noqa: E501
                     ],
                     "Consent Age Reached": row[
-                        "Are you 16 years or older?\n\nNote: If you are younger than 16 years, you are not allowed to consent to participation in the research due to the legal age of consent in the Netherlands (but you can stil"
+                        "Are you 16 years or older?\n\nNote: If you are younger than 16 years, you are not allowed to consent to participation in the research due to the legal age of consent in the Netherlands (but you can stil"  # noqa: E501
                     ]
                     == "Yes",
                     "Informed Consent Granted": row[
-                        'By selecting "yes" below, I confirm:\n\n1.  I have enough information about the research project from the separate  information sheet. I have read it and I had the chance to ask questions,  which have b'
+                        'By selecting "yes" below, I confirm:\n\n1.  I have enough information about the research project from the separate  information sheet. I have read it and I had the chance to ask questions,  which have b'  # noqa: E501
                     ]
                     == "Yes",
                 },
@@ -906,7 +906,7 @@ def grade_intake(df_in: DataFrame) -> DataFrame:
         quiz_ocs_xss_correct = [
             "XSS attacks may be prevented through input sanitization.",
             "XSS attacks can be used to steal credentials.",
-            "During a successful XSS attack the attacker may execute malicious code within the web browsers of other users visiting a website.",
+            "During a successful XSS attack the attacker may execute malicious code within the web browsers of other users visiting a website.",  # noqa: E501
         ]
         quiz_ocs_xss_incorrect = [
             "During a successful XSS attack malicious code is executed on a server distributing content.",
@@ -944,8 +944,8 @@ def grade_intake(df_in: DataFrame) -> DataFrame:
             "Metasploit is a tool that may be used to obtain persistence depending on the targeted system.",
         ]
         quiz_ocs_persistence_incorrect = [
-            "Persistence always implies that following a malware infection, malware will remain present after reinstallation of the operating system.",
-            "Persistence always implies malware will be executed at some point during the boot process of the infected machine.",
+            "Persistence always implies that following a malware infection, malware will remain present after reinstallation of the operating system.",  # noqa: E501
+            "Persistence always implies malware will be executed at some point during the boot process of the infected machine.",  # noqa: E501
             "In order to obtain persistence, malware must add an executable file to the startup folder on Windows.",
             "Persistence must be obtained in order for malware to accomplish its goal.",
             "Persistence always has associated network traffic.",
@@ -1088,13 +1088,13 @@ def grade_intake(df_in: DataFrame) -> DataFrame:
 
         quiz_suricata_match_answer = (
             row[
-                """Which of the following buffers would be matched by the following sequence of Suricata options: \n\ncontent:"FOO"; content:"bar"; depth:5;\n"""
+                """Which of the following buffers would be matched by the following sequence of Suricata options: \n\ncontent:"FOO"; content:"bar"; depth:5;\n"""  # noqa: E501
             ]
             .strip(";")
             .split(";")
             if not pandas.isna(
                 row[
-                    """Which of the following buffers would be matched by the following sequence of Suricata options: \n\ncontent:"FOO"; content:"bar"; depth:5;\n"""
+                    """Which of the following buffers would be matched by the following sequence of Suricata options: \n\ncontent:"FOO"; content:"bar"; depth:5;\n"""  # noqa: E501
                 ]
             )
             else []
@@ -1120,23 +1120,23 @@ def grade_intake(df_in: DataFrame) -> DataFrame:
             x + ")" if not x[-1] == ")" else x
             for x in (
                 row[
-                    "Read the following Suricata documentation and select the factually correct statements one can derive from the given sentence.\n\n\n\nModifiers\n\nstartswith\nThe startswith keyword is similar to depth. It ta"
+                    "Read the following Suricata documentation and select the factually correct statements one can derive from the given sentence.\n\n\n\nModifiers\n\nstartswith\nThe startswith keyword is similar to depth. It ta"  # noqa: E501
                 ]
                 .strip(";")
                 .split(");")
                 if not pandas.isna(
                     row[
-                        "Read the following Suricata documentation and select the factually correct statements one can derive from the given sentence.\n\n\n\nModifiers\n\nstartswith\nThe startswith keyword is similar to depth. It ta"
+                        "Read the following Suricata documentation and select the factually correct statements one can derive from the given sentence.\n\n\n\nModifiers\n\nstartswith\nThe startswith keyword is similar to depth. It ta"  # noqa: E501
                     ]
                 )
                 else []
             )
         )
         quiz_english_docs_correct = [
-            """alert dns any any -> any 53 (msg:"DNS Request to google.com"; dns.query; dotprefix; content:".google.com"; startswith; sid:1;)"""
+            """alert dns any any -> any 53 (msg:"DNS Request to google.com"; dns.query; dotprefix; content:".google.com"; startswith; sid:1;)"""  # noqa: E501
         ]
         quiz_english_docs_incorrect = [
-            """alert dns any any -> any 53 (msg:"DNS Request to google.com"; dns.query; dotprefix; content:"google.com"; startswith; sid:1;)""",
+            """alert dns any any -> any 53 (msg:"DNS Request to google.com"; dns.query; dotprefix; content:"google.com"; startswith; sid:1;)""",  # noqa: E501
             "I do not know.",
         ]
         quiz_english_docs = 0
@@ -1169,14 +1169,14 @@ def grade_intake(df_in: DataFrame) -> DataFrame:
         df_out_rows.append(
             {
                 "username": row[
-                    "What is the username you would like to reflect your performance on the leaderboard?\n\nNote: The leaderboard is visible to all participants. This can but does not need to be your real name. You can also"
+                    "What is the username you would like to reflect your performance on the leaderboard?\n\nNote: The leaderboard is visible to all participants. This can but does not need to be your real name. You can also"  # noqa: E501
                 ],
                 "Consent Age Reached": row[
-                    "Are you 16 years or older?\n\nNote: If you are younger than 16 years, you are not allowed to consent to participation in the research due to the legal age of consent in the Netherlands (but you can stil"
+                    "Are you 16 years or older?\n\nNote: If you are younger than 16 years, you are not allowed to consent to participation in the research due to the legal age of consent in the Netherlands (but you can stil"  # noqa: E501
                 ]
                 == "Yes",
                 "Informed Consent Granted": row[
-                    'By selecting "yes" below, I confirm:\n\n1.  I have enough information about the research project from the separate  information sheet. I have read it and I had the chance to ask questions,  which have b'
+                    'By selecting "yes" below, I confirm:\n\n1.  I have enough information about the research project from the separate  information sheet. I have read it and I had the chance to ask questions,  which have b'  # noqa: E501
                 ]
                 == "Yes",
                 "Learned About CTF": row[
@@ -1185,17 +1185,17 @@ def grade_intake(df_in: DataFrame) -> DataFrame:
                 "Gender": row["What is your gender?\n"],
                 "ISCED": isced,
                 "Control Question Correct": row[
-                    "This question is just to check if you are actually reading questions carefully. It is an attention check. If you read this, please click the third option.\n"
+                    "This question is just to check if you are actually reading questions carefully. It is an attention check. If you read this, please click the third option.\n"  # noqa: E501
                 ]
                 == "SSH",
                 "Intake Remarks": row.fillna("")[
                     "Do you have any feedback or remarks on the survey?\n"
                 ],
                 "Other Relevant Experiences": row.fillna("")[
-                    "Do you have any other relevant experiences (such as a job related to Security Operations or high expertise in another area you deem relevant) that may be relevant for the research? If so, describe the"
+                    "Do you have any other relevant experiences (such as a job related to Security Operations or high expertise in another area you deem relevant) that may be relevant for the research? If so, describe the"  # noqa: E501
                 ],
                 "Has Other Relevant Experiences": not row.isna()[
-                    "Do you have any other relevant experiences (such as a job related to Security Operations or high expertise in another area you deem relevant) that may be relevant for the research? If so, describe the"
+                    "Do you have any other relevant experiences (such as a job related to Security Operations or high expertise in another area you deem relevant) that may be relevant for the research? If so, describe the"  # noqa: E501
                 ],
                 "Self Graded CTF": self_graded_ctf,
                 "Quiz Networking TCP": quiz_networking_tcp,

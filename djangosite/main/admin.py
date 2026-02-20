@@ -1,13 +1,27 @@
 from django.contrib import admin
 from django.db.models.query import QuerySet
 
-from .models import Pcap, Result, Scenario, Submission, Test
+from .models import Pcap, Result, Scenario, Submission, Test, UserPreferences
+from .utils import validate_rule
 
 
 @admin.action(description="Test submissions again")
-def mark_for_testing(modeladmin, request, queryset: QuerySet["Submission"]):
+def mark_for_testing(
+    modeladmin, request, queryset: QuerySet["Submission"]  # noqa: ANN001, ARG001
+) -> None:
     Result.objects.filter(submission__in=queryset).delete()
     queryset.update(tested=False)
+
+
+@admin.action(description="Check submission validity and collect Suricata output")
+def check_validity(
+    modeladmin, request, queryset: QuerySet["Submission"]  # noqa: ANN001, ARG001
+) -> None:
+    for submission in queryset:
+        has_errors, output = validate_rule(submission.rule)
+        submission.valid = not has_errors
+        submission.suricata_output = output
+        submission.save()
 
 
 @admin.register(Pcap)
@@ -28,7 +42,7 @@ class TestAdmin(admin.ModelAdmin):
 
 @admin.register(Scenario)
 class ScenarioAdmin(admin.ModelAdmin):
-    list_display = ("title",)
+    list_display = ("title", "ordering_priority")
 
 
 @admin.register(Submission)
@@ -47,7 +61,7 @@ class SubmissionAdmin(admin.ModelAdmin):
     )
     list_filter = ["user", "scenario", "valid", "check_only", "tested"]
     search_fields = ["rule"]
-    actions = [mark_for_testing]
+    actions = [mark_for_testing, check_validity]
 
 
 @admin.register(Result)
@@ -70,3 +84,11 @@ class ResultAdmin(admin.ModelAdmin):
         "test__expected",
         "test__hidden",
     ]
+
+
+@admin.register(UserPreferences)
+class UserPreferencesAdmin(admin.ModelAdmin):
+    list_display = (
+        "user",
+        "research_consent",
+    )

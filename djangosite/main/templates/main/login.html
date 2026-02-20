@@ -55,7 +55,7 @@ Network Security Research, Intrusion Detection, Incident Response, Digital Foren
             <input type="hidden" name="next" value="{{ next }}">
             </form> {% endcomment %}
 
-            <form method="post" action="{% url 'main:login' %}">
+            <form class="my-1" method="post" action="{% url 'main:login' %}">
                 {% csrf_token %}
                 <div class="form-group my-1">
                     <label for="id_username">Username</label>
@@ -68,6 +68,10 @@ Network Security Research, Intrusion Detection, Incident Response, Digital Foren
                 <button type="submit" class="btn btn-primary my-1">Submit</button>
                 <input type="hidden" name="next" value="{{ next }}">
             </form>
+
+            {% if not user.is_authenticated and REGISTRATION_ALLOWED %}
+                <p>If you do not have an account yet, you can <a href="{% url 'main:register' %}">click here to register</a>.</p>
+            {% endif %}
 
             <p>If you forgot your password, please contact the organizers.</p>
         </div>

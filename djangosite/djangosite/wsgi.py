@@ -1,5 +1,4 @@
-"""
-WSGI config for djangosite project.
+"""WSGI config for djangosite project.
 
 It exposes the WSGI callable as a module-level variable named ``application``.
 

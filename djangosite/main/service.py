@@ -208,7 +208,7 @@ app-layer:
       encryption-handling: full
 pcap-file:
   checksum-checks: no
-""",
+""",  # noqa: E501
     yaml.Loader,
 )
 
@@ -231,11 +231,11 @@ logger = logging.getLogger(__name__)
 
 class TestService:
     @staticmethod
-    def _set_low_priority():
+    def _set_low_priority() -> None:
         os.nice(WORKER_NICENESS)
 
     @staticmethod
-    def start():
+    def start() -> None:
         # Preload pcaps for tests
         for pcap in Pcap.objects.all():
             TestService.ensure_pcap_availability(pcap)
@@ -245,7 +245,7 @@ class TestService:
         services = [
             subprocess.Popen(
                 ["/venv/bin/python3", "manage.py", "starttestserviceworker"],
-                preexec_fn=TestService._set_low_priority,
+                preexec_fn=TestService._set_low_priority,  # noqa: PLW1509
             )
             for _ in range(N_WORKERS)
         ]
@@ -265,7 +265,7 @@ class TestService:
                     )
 
     @staticmethod
-    def stop():
+    def stop() -> None:
         for proc in psutil.process_iter():
             # check whether the process name matches
             if (
@@ -276,7 +276,7 @@ class TestService:
                 logger.info("Killed existing TestService worker.")
 
     @staticmethod
-    def ensure_pcap_availability(pcap: Pcap):
+    def ensure_pcap_availability(pcap: Pcap) -> None:
         if os.path.exists(pcap.pcap.path):
             return
 
@@ -289,18 +289,20 @@ class TestService:
 
         try:
             urllib.request.urlretrieve(
-                "/".join([PCAP_HOST_URL, pcap.pcap.url]),
+                "/".join([PCAP_HOST_URL, pcap.pcap.url]),  # noqa: FLY002
                 pcap.pcap.path,
             )
-        except:
+        except Exception:
             raise RuntimeError(
                 "Failed to download PCAP for running tests: %s", pcap.title
             )
 
     @staticmethod
-    def start_loop():
+    def start_loop() -> None:
         sleeptime = random.uniform(0, MAX_SLEEPTIME / 10)
         while True:
+            origin = "UNKNOWN"
+
             # Close old connections to prevent OperationalError
             close_old_connections()
             cycle_start_time = time.time()
@@ -345,7 +347,7 @@ class TestService:
                 ).count()
                 > 0
             ):
-                # If a newer untested submission for the same user/scenario exists and no newer submissions for the same user/scenario have been tested yet, select the most recent one for testing
+                # If a newer untested submission for the same user/scenario exists and no newer submissions for the same user/scenario have been tested yet, select the most recent one for testing  # noqa: E501
                 if (
                     submissions.filter(
                         user=submission.user,
@@ -434,11 +436,11 @@ class TestService:
             )
 
     @staticmethod
-    def test_submission(submission: Submission, test: Test):
+    def test_submission(submission: Submission, test: Test) -> None:
         # Close old connections to prevent OperationalError
         close_old_connections()
 
-        id = str(
+        temp_id = str(
             hash(
                 "validate_rule"
                 + str(submission)
@@ -447,7 +449,7 @@ class TestService:
             )
         )
 
-        filename = id + ".rules"
+        filename = temp_id + ".rules"
         path = os.path.join("/tmp", filename)
         conf_path = path.replace(".rules", ".yaml")
 
@@ -498,10 +500,11 @@ class TestService:
                 capture_output=True,
                 text=True,
                 timeout=SURICATA_TIMEOUT,
+                check=False,
             )
         except subprocess.TimeoutExpired:
             logger.warning(
-                "Failed to run Suricata due to timeout for submission by user %s with submission ID %s and test %s for scenario %s",
+                "Failed to run Suricata due to timeout for submission by user %s with submission ID %s and test %s for scenario %s",  # noqa: E501
                 submission.user.username,
                 submission.pk,
                 test.title,
@@ -562,13 +565,12 @@ class TestService:
             else:
                 status = "Success"
                 score = 2
+        elif raised_alert:
+            status = "Failure"
+            score = -1
         else:
-            if raised_alert:
-                status = "Failure"
-                score = -1
-            else:
-                status = "Success"
-                score = 0
+            status = "Success"
+            score = 0
 
         result_yaml = yaml.dump(test_suricata_yaml)
 
@@ -587,6 +589,7 @@ class TestService:
         # Close old connections to prevent OperationalError
         # Saving result may still fail due to too many alerts or timeout?
 
+        result = None
         try:
             close_old_connections()
             result = Result(
@@ -601,7 +604,7 @@ class TestService:
                 n_alerts=n_alerts,
             )
             result.save()
-        except:
+        except Exception:
             logger.error(
                 "Failed to save result for submission by user %s with submission ID %s and test %s for scenario %s",
                 submission.user.username,
