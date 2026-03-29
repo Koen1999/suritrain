@@ -34,18 +34,18 @@ Network Security Research, Intrusion Detection, Incident Response, Digital Foren
                 {% if REGISTRATION_PASSWORD %}
                 <div class="form-group my-1">
                     <label for="id_code">Registration Code</label>
-                    <input type="text" class="form-control" name="code" autocapitalize="none" maxlength="32" required="" id="id_code" placeholder="Enter reigstration code">
+                    <input type="text" class="form-control" name="code" value="{{form.code.value|default_if_none:""}}" autocapitalize="none" maxlength="32" required="" id="id_code" placeholder="Enter reigstration code">
                     {{ form.code.errors }}
                 </div>
                 {% endif %}
                 <div class="form-group my-1">
                     <label for="id_email">Email address</label>
-                    <input type="email" class="form-control" name="email" autofocus="" autocapitalize="none" autocomplete="email" required="" class="vTextField" maxlength="254" id="id_email" placeholder="user@foo.bar">
+                    <input type="email" class="form-control" name="email" value="{{form.email.value|default_if_none:""}}" autofocus="" autocapitalize="none" autocomplete="email" required="" class="vTextField" maxlength="254" id="id_email" placeholder="user@foo.bar">
                     {{ form.email.errors }}
                 </div>
                 <div class="form-group my-1">
                     <label for="id_username">Username</label>
-                    <input type="text" class="form-control" name="username" autocapitalize="none" autocomplete="username" maxlength="32" required="" id="id_username" placeholder="Enter username">
+                    <input type="text" class="form-control" name="username" value="{{form.username.value|default_if_none:""}}" autocapitalize="none" autocomplete="username" maxlength="32" required="" id="id_username" placeholder="Enter username">
                     {{ form.username.errors }}
                 </div>
                 <div class="form-group my-1">
@@ -63,13 +63,13 @@ Network Security Research, Intrusion Detection, Incident Response, Digital Foren
                     </label>
                     {{ form.informed_consent.errors }}
                     <div class="form-check">
-                        <input class="form-check-input" type="radio" name="informed_consent" id="id_option_accept_informed_consent" value=true>
+                        <input class="form-check-input" type="radio" name="informed_consent" {% if form.informed_consent.value == "true" %}checked{% endif %} id="id_option_accept_informed_consent" value="true">
                         <label class="form-check-label" for="id_option_accept_informed_consent">
                             I give permission.
                         </label>
                     </div>
                     <div class="form-check">
-                        <input class="form-check-input" type="radio" name="informed_consent" id="id_option_deny_informed_consent" value=false>
+                        <input class="form-check-input" type="radio" name="informed_consent" {% if form.informed_consent.value == "false" %}checked{% endif %} id="id_option_deny_informed_consent" value="false">
                         <label class="form-check-label" for="id_option_deny_informed_consent">
                             I do not give permission.
                         </label>
