@@ -34,7 +34,7 @@ Network Security Research, Intrusion Detection, Incident Response, Digital Foren
                 {% if REGISTRATION_PASSWORD %}
                 <div class="form-group my-1">
                     <label for="id_code">Registration Code</label>
-                    <input type="text" class="form-control" name="code" value="{{form.code.value|default_if_none:""}}" autocapitalize="none" maxlength="32" required="" id="id_code" placeholder="Enter reigstration code">
+                    <input type="text" class="form-control" name="code" value="{{form.code.value|default_if_none:""}}" autocapitalize="none" maxlength="32" required="" id="id_code" placeholder="Enter registration code">
                     {{ form.code.errors }}
                 </div>
                 {% endif %}
