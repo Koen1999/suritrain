@@ -26,7 +26,7 @@ Network Security Research, Intrusion Detection, Incident Response, Digital Foren
     <div class="row justify-content-center">
         <div class="col-sm-6">
             {% if form.errors %}
-            <p>The registration form contains errors. Please try again.</p>
+            <p class="text-warning">The registration form contains errors. Please try again.</p>
             {% endif %}
 
             <form class="my-1" method="post" action="{% url 'main:register' %}">
@@ -35,33 +35,42 @@ Network Security Research, Intrusion Detection, Incident Response, Digital Foren
                 <div class="form-group my-1">
                     <label for="id_code">Registration Code</label>
                     <input type="text" class="form-control" name="code" value="{{form.code.value|default_if_none:""}}" autocapitalize="none" maxlength="32" required="" id="id_code" placeholder="Enter registration code">
-                    {{ form.code.errors }}
+                    <div class="text-warning mt-2">
+                        {{ form.code.errors }}
+                    </div>
                 </div>
                 {% endif %}
                 <div class="form-group my-1">
                     <label for="id_email">Email address</label>
                     <input type="email" class="form-control" name="email" value="{{form.email.value|default_if_none:""}}" autofocus="" autocapitalize="none" autocomplete="email" required="" class="vTextField" maxlength="254" id="id_email" placeholder="user@foo.bar">
-                    {{ form.email.errors }}
+                    <div class="text-warning mt-2">
+                        {{ form.email.errors }}
+                    </div>
                 </div>
                 <div class="form-group my-1">
                     <label for="id_username">Username</label>
                     <input type="text" class="form-control" name="username" value="{{form.username.value|default_if_none:""}}" autocapitalize="none" autocomplete="username" maxlength="32" required="" id="id_username" placeholder="Enter username">
-                    {{ form.username.errors }}
+                    <div class="text-warning mt-2">
+                        {{ form.username.errors }}
+                    </div>
                 </div>
                 <div class="form-group my-1">
                     <label for="id_password1">Password</label>
                     <input type="password" class="form-control" name="password1" autocapitalize="none" autocomplete="current-password" required="" id="id_password1" placeholder="Enter password">
-                    {{ form.password1.errors }}
+                    <div class="text-warning mt-2">
+                        {{ form.password1.errors }}
+                    </div>
                 </div>
                 <div class="form-group my-1">
                     <label for="id_password2">Confirm Password</label>
                     <input type="password" class="form-control" name="password2" autocapitalize="none" required="" id="id_password2" placeholder="Repeat password">
-                    {{ form.password2.errors }}
+                    <div class="text-warning mt-2">
+                        {{ form.password2.errors }}
+                    </div>
                 </div>
                 <div class="form-group my-1">
                     <label class="form-check-label">I give permission to use data submitted through this platform anonymously for research to learn more about how intrusion detection rules are written and the effects thereof.
                     </label>
-                    {{ form.informed_consent.errors }}
                     <div class="form-check">
                         <input class="form-check-input" type="radio" name="informed_consent" {% if form.informed_consent.value == "true" %}checked{% endif %} id="id_option_accept_informed_consent" value="true">
                         <label class="form-check-label" for="id_option_accept_informed_consent">
@@ -73,6 +82,9 @@ Network Security Research, Intrusion Detection, Incident Response, Digital Foren
                         <label class="form-check-label" for="id_option_deny_informed_consent">
                             I do not give permission.
                         </label>
+                    </div>
+                    <div class="text-warning mt-2">
+                        {{ form.informed_consent.errors }}
                     </div>
                 </div>
                 <button type="submit" class="btn btn-primary my-1">Submit</button>
