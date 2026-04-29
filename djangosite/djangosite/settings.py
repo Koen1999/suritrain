@@ -294,3 +294,5 @@ REGISTRATION_EXPERIMENT_GROUP: str = "Experiment Group - 1" # The group particip
 RANDOMIZED_SCENARIO_ORDER: bool = True # True if scenarios should be presented in a random order, mostly relevant to scientific experiments. False if you want to present them in the order they are added to the database after the provided priority.
 REQUIRE_SCENARIO_UNLOCKING = True # True if scenarios should be locked until the previous scenario is completed, False if you want to allow participants to access all scenarios at once.
 UNLOCK_AFTER_SECONDS: int = 60 * 5 # The number of seconds after which a scenario is automatically unlocked after the previous scenario is attempted. This prevents participants from being stuck in a scenario for too long, especially if they are not able to complete it.
+
+DISABLE_DASHBOARD: bool = False # The dashboard may consume additional computational resources and may not be necessary for all use cases. Set to True to disable the dashboard and save resources.

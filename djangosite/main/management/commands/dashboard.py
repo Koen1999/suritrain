@@ -13,6 +13,9 @@ class Command(BaseCommand):
     def handle(self, *args, **options) -> None:  # noqa: ANN002, ANN003, ARG002
         os.makedirs("dumps/dashboard", exist_ok=True)
 
+        if str(os.environ.get("DISABLE_DASHBOARD", "False")).lower() == "true":
+            return
+
         while True:
             participant_df, rule_df, result_df, update_df, change_df = get_dataframes()
 
