@@ -112,8 +112,15 @@ DATABASES = {
         "USER": "postgres",
         "PASSWORD": "ANONYMIZED",
         "NAME": "django",
-        "CONN_MAX_AGE": None,
+        "CONN_MAX_AGE": 0,
         "CONN_HEALTH_CHECKS": True,
+        "OPTIONS": {
+            "pool": {
+                "min_size": 1,
+                "max_size": 2,
+                "timeout": 10,
+            },
+        },
     }
 }
 

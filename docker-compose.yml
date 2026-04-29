@@ -1,6 +1,9 @@
 services:
   postgres:
     image: postgres:16
+    command: >
+      postgres
+        -c max_connections=300
     environment:
       POSTGRES_DB: django
       POSTGRES_USER: postgres
