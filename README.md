@@ -1,4 +1,4 @@
-# SuriTrain
+# How It's Made
 
 ## Network traces used for research
 
@@ -127,3 +127,46 @@ If you later want to import that json file, you can simply run the following com
 
 You can edit in the admin website the scenarios and upload a PDF file there for each scenario.
 Additionally, you can make an instruction lecture PDF to participants depending on their experiment group. Users that are a member of "Experiment Group 1" will be able to access a file `djangosite/handouts/group1/handout.pdf` if that file exists. The same goes for any other experiment group number.
+
+### Running a workshop
+
+1. Provide instructions to prospective participants and collect relevant information through a questionnaire.
+
+Wait for responses to come in and then proceed with the following step, about 7 days before the planned activity.
+
+1. Download Microsoft Forms Intake as Excel file and place it under `djangosite/forms`
+2. Modify `intake.py`,`credentials.py`, and `outtake.py` to reference the Excel file and contain correct details for date, location, experiment group, etc.
+3. `docker compose exec django /venv/bin/python3 manage.py intake`
+
+The last command will send emails to all participants with their username, some general instructions, and a link to the instruction lecture video.
+
+At the start of the workshop, run the following command to send out credentials to all registered users, enabling them to access the platform for the first time.
+
+1. `docker compose exec django /venv/bin/python3 manage.py credentials`
+
+At the end of the workshop, you can run the following command to make the scores on the hidden tests visible to all users, and inform them about the outtake questionnaire.
+
+1. `docker compose exec django /venv/bin/python3 manage.py outtake`
+
+### Export experiment data
+
+To generate datasets for research from the data collected in the back-end, you can follow the following procedure.
+
+1. Download Microsoft Forms Lecture and Outtake as Excel files and place them under `djangosite/forms`
+2. Make modifications in `djangosite/main/management/commands/analyze.py` and `djangosite/main/grading.py` to work with the questions asked in the questionnaire if different.
+3. `docker compose exec django /venv/bin/python3 manage.py analyze`
+
+Running this command will generate the datasets described in the next section.
+
+## Collected datasets
+
+The datasets collected as part of the research describing rule engineering processes can be found in `djangosite/dumps`. The files in this directory correspond to the processes of the 60 participants recruited for this study. The subfolder called `pilot` contains the data corresponding to the experts recruited from the collaborating SOC in an identical format.
+
+For both groups, the dataset consists of 5 `.parquet` files, each representing a table (i.e., that you could load into a relational database). Each participant is associated with zero or more rules. Each valid rule that is submitted is associated with several results, describing outcomes on the tests available for the associated scenario. Updates represent changes between consecutively submitted rules by the same user for the same scenario. One update may consist of multiple changes, representing implementation-level modifications that we isolated.
+
+Parquet files can be loaded using `pandas.read_parquet()` or similar tools. The `analysis.ipynb` notebook can be used as an elaborate example of how to process these files.
+
+## Data analysis and figures for the manuscript
+
+The analysis of the dataset was performed using the `analysis.ipynb` notebook using the dependency versions specified in `requirements.txt`.
+The notebook allows for fully replicating all numbers and figures that describe these datasets contained in our manuscript.
